@@ -50,11 +50,11 @@ class SelectRol extends StatelessWidget {
     );
   }
 
-  BoxDecoration estiloImagen() {
+  BoxDecoration estiloImagen(context) {
     return BoxDecoration(
       // color: Colors.red,
       borderRadius: BorderRadius.circular(15),
-      color: Colors.white,
+      color: Theme.of(context).cardColor,
       boxShadow: [
         BoxShadow(
           color: Colors.black12,
@@ -92,7 +92,7 @@ class SelectRol extends StatelessWidget {
                     child: Container(
                       height: size.height * 0.3,
                       width: 200,
-                      decoration: estiloImagen(),
+                      decoration: estiloImagen(context),
                       child: Column(
                         children: [
                           Expanded(
@@ -128,7 +128,7 @@ class SelectRol extends StatelessWidget {
                     child: Container(
                       width: 200,
                       height: size.height * 0.3,
-                      decoration: estiloImagen(),
+                      decoration: estiloImagen(context),
                       child: Column(
                         children: [
                           Expanded(

@@ -14,6 +14,9 @@ class InputControl extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      style: TextStyle(
+        color: Theme.of(context).hintColor,
+      ),
       obscureText: false,
       cursorColor: Theme.of(context).hintColor,
       decoration: InputDecoration(
@@ -61,6 +64,9 @@ class _InputControl2State extends State<InputControl2> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      style: TextStyle(
+        color: Theme.of(context).hintColor,
+      ),
       obscureText: estadoPass,
       cursorColor: Theme.of(context).hintColor,
       decoration: InputDecoration(

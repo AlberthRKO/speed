@@ -123,7 +123,7 @@ class BoxForm2 extends StatelessWidget {
         width: size.width > 450 ? 400 : double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           boxShadow: [
             BoxShadow(
               color: Colors.black12,

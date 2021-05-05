@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:speed/components/actionAccess.dart';
 import 'package:speed/components/background.dart';
 import 'package:speed/components/button.dart';
 import 'package:speed/components/inputForm.dart';
 import 'package:speed/components/shakeTransition.dart';
 import 'package:speed/screen/register_screen.dart';
+import 'package:speed/theme/themeChange.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -14,6 +16,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final temaController = Get.put(TemaProvider());
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -141,26 +145,45 @@ class _LoginState extends State<Login> {
 }
 
 class ReturnBack extends StatelessWidget {
-  const ReturnBack({
+  ReturnBack({
     Key key,
   }) : super(key: key);
+
+  final temaController = Get.put(TemaProvider());
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => Navigator.pop(context),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          IconButton(
-            icon: Icon(
-              FontAwesomeIcons.arrowLeft,
-              size: 20,
-              color: Theme.of(context).accentColor,
-            ),
-            onPressed: () => Navigator.pop(context),
+          Row(
+            children: [
+              IconButton(
+                icon: Icon(
+                  FontAwesomeIcons.arrowLeft,
+                  size: 20,
+                  color: Theme.of(context).accentColor,
+                ),
+                onPressed: () => Navigator.pop(context),
+              ),
+              Text(
+                'Atras',
+                style: TextStyle(
+                  color: Theme.of(context).accentColor,
+                ),
+              ),
+            ],
           ),
-          Text('Atras'),
+          GetBuilder<TemaProvider>(
+            builder: (_) => Switch(
+              value: temaController.isDark,
+              onChanged: (estado) {
+                temaController.cambiarTema(estado);
+              },
+            ),
+          ),
         ],
       ),
     );
@@ -185,7 +208,7 @@ class BoxForm2 extends StatelessWidget {
         width: size.width > 450 ? 400 : double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           boxShadow: [
             BoxShadow(
               color: Colors.black12,
