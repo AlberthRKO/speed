@@ -6,14 +6,17 @@ class InputControl extends StatelessWidget {
     Key key,
     @required this.hint,
     @required this.icon,
+    @required this.controlador,
   }) : super(key: key);
 
   final String hint;
   final dynamic icon;
+  final dynamic controlador;
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
+      controller: controlador,
       style: TextStyle(
         color: Theme.of(context).hintColor,
       ),
@@ -51,9 +54,11 @@ class InputControl2 extends StatefulWidget {
   const InputControl2({
     Key key,
     @required this.hint,
+    @required this.controlador2,
   }) : super(key: key);
 
   final String hint;
+  final dynamic controlador2;
 
   @override
   _InputControl2State createState() => _InputControl2State();
@@ -63,7 +68,8 @@ class _InputControl2State extends State<InputControl2> {
   bool estadoPass = true;
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
+      controller: widget.controlador2,
       style: TextStyle(
         color: Theme.of(context).hintColor,
       ),

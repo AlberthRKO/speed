@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:speed/screen/splash_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+// ponemos async para que cargue en toda la app y mantenga la autenticacion
+void main() async {
+  // inicializamos firebase
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 

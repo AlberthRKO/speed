@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "415655238338",
+    "firebase_url": "https://mis-lugares-dd12c.firebaseio.com",
+    "project_id": "mis-lugares-dd12c",
+    "storage_bucket": "mis-lugares-dd12c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:415655238338:android:7f4830b01e4cf19f59395b",
+        "android_client_info": {
+          "package_name": "com.alberth.speed"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "415655238338-e5pg02hjej2fos0uuldq89nd7fe6evvb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alberth.speed",
+            "certificate_hash": "e84bdeebfd2fd1aef51597037285268fcaa130ba"
+          }
+        },
+        {
+          "client_id": "415655238338-vd8mqf471hqru2vhir0ptpcadtpi94e7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBGENXW1SeekfAVZ2qZC7pt2WK7-s1K8A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "415655238338-vd8mqf471hqru2vhir0ptpcadtpi94e7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

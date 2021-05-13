@@ -18,7 +18,7 @@ dependencies:
   flutter_svg: ^0.22.0
   get: ^4.1.4
   shared_preferences: ^2.0.5
-  lite_rolling_switch: ^0.1.1
+  firebase_auth: ^1.1.4
 
 dev_dependencies:
   flutter_test:

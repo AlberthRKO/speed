@@ -7,16 +7,13 @@ import 'package:speed/components/background.dart';
 import 'package:speed/components/button.dart';
 import 'package:speed/components/inputForm.dart';
 import 'package:speed/components/shakeTransition.dart';
+import 'package:speed/controllers/login_controller.dart';
 import 'package:speed/screen/register_screen.dart';
 import 'package:speed/theme/themeChange.dart';
 
-class Login extends StatefulWidget {
-  @override
-  _LoginState createState() => _LoginState();
-}
-
-class _LoginState extends State<Login> {
+class Login extends StatelessWidget {
   final temaController = Get.put(TemaProvider());
+  final _con = Get.put(LoginController());
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +73,7 @@ class _LoginState extends State<Login> {
                         child: ShakeTransition(
                           axis: Axis.vertical,
                           duration: Duration(
-                            milliseconds: 2000,
+                            milliseconds: 1500,
                           ),
                           typeAnimation: Curves.easeIn,
                           child: Column(
