@@ -5,9 +5,11 @@ class Button extends StatelessWidget {
     Key key,
     @required this.texto,
     @required this.color,
+    @required this.funcion,
   }) : super(key: key);
   final String texto;
   final Color color;
+  final dynamic funcion;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class Button extends StatelessWidget {
         child: FlatButton(
           padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
           color: color,
-          onPressed: () {},
+          onPressed: funcion,
           child: Text(
             texto,
             style: Theme.of(context).textTheme.headline5,

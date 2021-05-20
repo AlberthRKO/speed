@@ -146,7 +146,7 @@ class TemaProvider extends GetxController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
+    // 
     cargarPreferencias().then((value) => cargarTema());
     super.onInit();
   }

@@ -13,129 +13,155 @@ import 'package:speed/theme/themeChange.dart';
 
 class Login extends StatelessWidget {
   final temaController = Get.put(TemaProvider());
+
   final _con = Get.put(LoginController());
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Background(
-      taman: size.width > 450 ? 750 : 550,
-      child: ListView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        children: [
-          Container(
-            width: double.infinity,
-            // height: size.height * 0.96,
-            child: Column(
-              // mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ReturnBack(),
-                // widget creado para animacion
-                ShakeTransition(
-                  axis: Axis.vertical,
-                  duration: Duration(
-                    milliseconds: 2500,
+    return GetBuilder<LoginController>(
+      init: _con,
+      builder: (_) => Background(
+        taman: size.width > 450 ? 750 : 550,
+        child: ListView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          children: [
+            Container(
+              width: double.infinity,
+              // height: size.height * 0.96,
+              child: Column(
+                // mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ReturnBack(),
+                  // widget creado para animacion
+                  ShakeTransition(
+                    axis: Axis.vertical,
+                    duration: Duration(
+                      milliseconds: 2500,
+                    ),
+                    child: SvgPicture.asset(
+                      'assets/images/login.svg',
+                      height: size.height > 450 ? size.height * 0.3 : 200,
+                    ),
                   ),
-                  child: SvgPicture.asset(
-                    'assets/images/login.svg',
-                    height: size.height > 450 ? size.height * 0.3 : 200,
-                  ),
-                ),
-                BoxForm2(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // titulo form
-                      ShakeTransition(
-                        duration: Duration(milliseconds: 3000),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Login',
-                              style: Theme.of(context).textTheme.headline4,
-                            ),
-                            SizedBox(
-                              height: 3,
-                            ),
-                            Text(
-                              'Inicia sesión con tu cuenta',
-                              style: Theme.of(context).textTheme.bodyText1,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: 10,
-                        ),
-                        child: ShakeTransition(
-                          axis: Axis.vertical,
-                          duration: Duration(
-                            milliseconds: 1500,
-                          ),
-                          typeAnimation: Curves.easeIn,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              // el widget creado lo reutilizamos
-                              InputControl(
-                                hint: 'Email',
-                                icon: FontAwesomeIcons.solidEnvelope,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              InputControl2(
-                                hint: 'Contraseña',
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Container(
-                                alignment: Alignment.centerRight,
-                                child: Text(
-                                  'Olvido su contraseña ?',
+                  Form(
+                    key: _.formKey,
+                    child: BoxForm2(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // titulo form
+                          ShakeTransition(
+                            duration: Duration(milliseconds: 3000),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Login',
+                                  style: Theme.of(context).textTheme.headline4,
+                                ),
+                                SizedBox(
+                                  height: 3,
+                                ),
+                                Text(
+                                  'Inicia sesión con tu cuenta',
                                   style: Theme.of(context).textTheme.bodyText1,
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 15,
+                              vertical: 10,
+                            ),
+                            child: ShakeTransition(
+                              axis: Axis.vertical,
+                              duration: Duration(
+                                milliseconds: 1500,
+                              ),
+                              typeAnimation: Curves.easeIn,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  // el widget creado lo reutilizamos
+                                  InputControl(
+                                    controlador: _.emailController,
+                                    hint: 'Email',
+                                    icon: FontAwesomeIcons.solidEnvelope,
+                                    validar: (value) => value.isEmpty
+                                        ? 'El email no puede estar en blanco'
+                                        : ((!GetUtils.isEmail(value))
+                                            ? 'Formato de email invalido'
+                                            : null),
+                                    // onSaved: (value) => _email = value,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  InputControl2(
+                                    controlador2: _.passwordController,
+                                    hint: 'Contraseña',
+                                    validar: (value) => value.isEmpty
+                                        ? 'La contraseña no puede estar en blanco'
+                                        : ((value.length < 6)
+                                            ? 'La contraseña debe tener almenos 6 caracteres'
+                                            : null),
+                                    // onSaved: (value) => _password = value,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                      'Olvido su contraseña ?',
+                                      style:
+                                          Theme.of(context).textTheme.bodyText1,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          ShakeTransition2(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Button(
+                                  funcion: () async {
+                                    await _.loginEmailPassword(context);
+                                  },
+                                  texto: 'Login',
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
                       ),
-                      ShakeTransition2(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Button(
-                                texto: 'Login',
-                                color: Theme.of(context).primaryColor),
-                          ],
-                        ),
-                      )
-                    ],
+                      //tamanBox: 0.47,
+                    ),
                   ),
-                  //tamanBox: 0.47,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                ShakeTransition(
-                  child: ActionAccess(
-                    typeAnimation: Curves.fastOutSlowIn,
-                    text: 'No tienes una cuenta ?',
-                    textLink: 'Registrate',
-                    Vista: Register(),
+                  SizedBox(
+                    height: 10,
                   ),
-                ),
-                SizedBox(
-                  height: 20,
-                )
-              ],
+                  ShakeTransition(
+                    child: ActionAccess(
+                      typeAnimation: Curves.fastOutSlowIn,
+                      text: 'No tienes una cuenta ?',
+                      textLink: 'Registrate',
+                      Vista: Register(),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  )
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
