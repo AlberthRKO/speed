@@ -65,7 +65,7 @@ class Login extends StatelessWidget {
                                 ),
                                 Text(
                                   'Inicia sesión con tu cuenta',
-                                  style: Theme.of(context).textTheme.bodyText1,
+                                  style: Theme.of(context).textTheme.bodyText2,
                                 ),
                               ],
                             ),
@@ -117,7 +117,7 @@ class Login extends StatelessWidget {
                                     child: Text(
                                       'Olvido su contraseña ?',
                                       style:
-                                          Theme.of(context).textTheme.bodyText1,
+                                          Theme.of(context).textTheme.bodyText2,
                                     ),
                                   ),
                                 ],
@@ -151,7 +151,7 @@ class Login extends StatelessWidget {
                       typeAnimation: Curves.fastOutSlowIn,
                       text: 'No tienes una cuenta ?',
                       textLink: 'Registrate',
-                      Vista: Register(),
+                      vista: Register(),
                     ),
                   ),
                   SizedBox(
@@ -176,12 +176,12 @@ class ReturnBack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => Navigator.pop(context),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        InkWell(
+          onTap: () => Navigator.pop(context),
+          child: Row(
             children: [
               IconButton(
                 icon: Icon(
@@ -199,16 +199,16 @@ class ReturnBack extends StatelessWidget {
               ),
             ],
           ),
-          GetBuilder<TemaProvider>(
-            builder: (_) => Switch(
-              value: temaController.isDark,
-              onChanged: (estado) {
-                temaController.cambiarTema(estado);
-              },
-            ),
+        ),
+        GetBuilder<TemaProvider>(
+          builder: (_) => Switch(
+            value: temaController.isDark,
+            onChanged: (estado) {
+              temaController.cambiarTema(estado);
+            },
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:speed/components/navigator.dart';
 import 'package:speed/components/shakeTransition.dart';
+import 'package:speed/screen/home_screen.dart';
 import 'package:speed/screen/login_screen.dart';
 
 class SelectRol extends StatelessWidget {
@@ -34,7 +35,7 @@ class SelectRol extends StatelessWidget {
                 children: [
                   Text(
                     'Speed',
-                    style: Theme.of(context).textTheme.bodyText2,
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
                   SvgPicture.asset(
                     'assets/images/splash.svg',
@@ -43,7 +44,7 @@ class SelectRol extends StatelessWidget {
                 ],
               ),
             ),
-            ContentRol(context, size),
+            contentRol(context, size),
           ],
         ),
       ),
@@ -65,7 +66,7 @@ class SelectRol extends StatelessWidget {
     );
   }
 
-  Widget ContentRol(context, size) {
+  Widget contentRol(context, size) {
     return Container(
       height: size.height,
       width: double.infinity,

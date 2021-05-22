@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class TemaProvider extends GetxController {
   var isDark = false;
+  String modo = 'Claro';
   // creamos una variable para guardar el modo de nuestro tema
   SharedPreferences preferences;
   // String prefkey = "isDarkModeKey";
@@ -45,20 +46,39 @@ class TemaProvider extends GetxController {
           ),
           headline5: TextStyle(
             fontFamily: 'RubikI',
+            fontSize: 18,
+            color: Color(0XFF3B4661),
+            fontWeight: FontWeight.bold,
+          ),
+          headline6: TextStyle(
+            fontFamily: 'RubikI',
+            fontSize: 25,
+            color: Color(0XFF3B4661),
+            fontStyle: FontStyle.italic,
+            fontWeight: FontWeight.bold,
+          ),
+          button: TextStyle(
+            fontFamily: 'RubikI',
             fontSize: 16,
             color: Color(0XFF3B4661),
             fontWeight: FontWeight.bold,
           ),
-          bodyText1: TextStyle(
+          bodyText2: TextStyle(
             fontFamily: 'RubikI',
             fontSize: 13,
             color: Color(0XFF3B4661),
           ),
-          bodyText2: TextStyle(
+          bodyText1: TextStyle(
             fontFamily: 'RubikI',
             fontSize: 15,
             color: Color(0XFF3B4661),
             fontStyle: FontStyle.italic,
+            fontWeight: FontWeight.bold,
+          ),
+          subtitle2: TextStyle(
+            fontFamily: 'RubikI',
+            fontSize: 13,
+            color: Color(0XFF3B4661),
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -105,20 +125,39 @@ class TemaProvider extends GetxController {
           ),
           headline5: TextStyle(
             fontFamily: 'RubikI',
+            fontSize: 18,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+          headline6: TextStyle(
+            fontFamily: 'RubikI',
+            fontSize: 25,
+            color: Colors.white,
+            fontStyle: FontStyle.italic,
+            fontWeight: FontWeight.bold,
+          ),
+          button: TextStyle(
+            fontFamily: 'RubikI',
             fontSize: 16,
             color: Color(0XFF3B4661),
             fontWeight: FontWeight.bold,
           ),
-          bodyText1: TextStyle(
+          bodyText2: TextStyle(
             fontFamily: 'RubikI',
             fontSize: 13,
             color: Colors.white,
           ),
-          bodyText2: TextStyle(
+          bodyText1: TextStyle(
             fontFamily: 'RubikI',
             fontSize: 15,
             color: Colors.white,
             fontStyle: FontStyle.italic,
+            fontWeight: FontWeight.bold,
+          ),
+          subtitle2: TextStyle(
+            fontFamily: 'RubikI',
+            fontSize: 13,
+            color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -132,9 +171,11 @@ class TemaProvider extends GetxController {
       // si es true cambiamos el estado del value isdark a true..
       //porque arrancaba en false en el switch
       temaDark();
+      modo = 'Oscuro';
       isDark = true;
     } else {
       temaLight();
+      modo = 'Claro';
       isDark = false;
     }
     // hacemos un update en el getX para que lee los cambios

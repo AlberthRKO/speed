@@ -33,7 +33,7 @@ class Button extends StatelessWidget {
           onPressed: funcion,
           child: Text(
             texto,
-            style: Theme.of(context).textTheme.headline5,
+            style: Theme.of(context).textTheme.button,
           ),
         ),
       ),

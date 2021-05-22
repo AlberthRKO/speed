@@ -5,13 +5,13 @@ class ActionAccess extends StatelessWidget {
     Key key,
     @required this.text,
     @required this.textLink,
-    @required this.Vista,
+    @required this.vista,
     @required this.typeAnimation,
   }) : super(key: key);
 
   final String text;
   final String textLink;
-  final Widget Vista;
+  final Widget vista;
   final Curve typeAnimation;
 
   @override
@@ -21,7 +21,7 @@ class ActionAccess extends StatelessWidget {
       children: [
         Text(
           text,
-          style: Theme.of(context).textTheme.bodyText1,
+          style: Theme.of(context).textTheme.bodyText2,
         ),
         SizedBox(
           width: 10,
@@ -35,7 +35,7 @@ class ActionAccess extends StatelessWidget {
             context,
             PageRouteBuilder(
               transitionDuration: Duration(seconds: 1),
-              pageBuilder: (context, animation, animationTime) => Vista,
+              pageBuilder: (context, animation, animationTime) => vista,
               transitionsBuilder: (context, animation, animationTime, child) {
                 animation = CurvedAnimation(
                   parent: animation,

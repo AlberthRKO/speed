@@ -1,11 +1,68 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:speed/components/contenedor.dart';
+import 'package:speed/components/sidebar.dart';
+import 'package:speed/controllers/sidebar_controller.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Center(
-        child: Text('Hola'),
+      /* appBar: AppBar(
+        elevation: 0,
+        toolbarHeight: size.height * 0,
+      ), */
+      body: Stack(
+        children: [
+          Sidebar(),
+          GetBuilder<SidebarController>(
+            init: SidebarController(),
+            builder: (_) => ContenedorAnimado(
+              isDrawerOpen: _.isDrawerOpen,
+              xOffset: _.xOffset,
+              yOffset: _.yOffset,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          onPressed: () => _.abrirSidebar(size),
+                          icon: Icon(
+                            FontAwesomeIcons.bars,
+                            size: 20,
+                            color: Theme.of(context).hintColor,
+                          ),
+                        ),
+                        Text(
+                          'Speed',
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                        IconButton(
+                          onPressed: () => _.abrirSidebar(size),
+                          icon: Icon(
+                            FontAwesomeIcons.ellipsisV,
+                            size: 20,
+                            color: Theme.of(context).hintColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

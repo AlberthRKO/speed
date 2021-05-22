@@ -53,7 +53,7 @@ class Register extends StatelessWidget {
                                   child: Text(
                                     'Create una cuenta para poder acceder a los servicios',
                                     style:
-                                        Theme.of(context).textTheme.bodyText1,
+                                        Theme.of(context).textTheme.bodyText2,
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
