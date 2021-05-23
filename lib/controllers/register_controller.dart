@@ -1,7 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+import 'package:speed/Models/client.dart';
+import 'package:speed/controllers/cliente_controller.dart';
 import 'package:speed/screen/home_screen.dart';
+import 'package:speed/utils/progress.dart';
 
 class RegisterController extends GetxController {
   // instanciamos auth de firebase
@@ -33,9 +37,12 @@ class RegisterController extends GetxController {
 
   Future<void> registrarUser(context) async {
     String nombre = name.text;
-    // String emaill = email.text;
+    String emaill = email.text;
     String pass = password.text;
     String passCon = passwordConfirm.text;
+    ProgressDialog pr =
+        Progresso.crearProgress(context, 'Espere un momento...');
+    // creamos el progress dialog
 
     /* if (nombre.isEmpty && emaill.isEmpty && pass.isEmpty && passCon.isEmpty) {
       snackError(
@@ -65,6 +72,7 @@ class RegisterController extends GetxController {
       );
       return;
     }
+    pr.show();
 
     try {
       final User user = (await _auth.createUserWithEmailAndPassword(
@@ -75,6 +83,15 @@ class RegisterController extends GetxController {
 
       // preguntamos si existe usuario
       if (user != null) {
+        Client client = new Client(
+          id: user.uid,
+          username: nombre,
+          email: emaill,
+          password: pass,
+        );
+
+        await ClientController().create(client);
+        pr.hide();
         Get.snackbar(
           'Registro Exitoso', //titulo
           'Su cuenta como $nombre ha sido creada',
@@ -83,6 +100,7 @@ class RegisterController extends GetxController {
         );
         success = true;
         print('Registrado');
+        print(user.uid);
         Future.delayed(
           Duration(seconds: 2),
           () => Get.to(
@@ -90,10 +108,12 @@ class RegisterController extends GetxController {
             transition: Transition.downToUp,
           ),
         );
+
         userEmail = user.email;
       }
     } catch (e) {
       print(e);
+      pr.hide();
       // si fallo mostramos el aviso abajo
       Get.snackbar(
         'Error',

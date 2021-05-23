@@ -19,26 +19,38 @@ class ContenedorAnimado extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return AnimatedContainer(
-        duration: Duration(milliseconds: 200),
-        // hacemos una transformacion de ejes y una rotacion
-        transform: Matrix4.translationValues(xOffset, yOffset, 0)
-          ..scale(isDrawerOpen ? 0.90 : 1.00)
-          ..rotateZ(isDrawerOpen ? pi / 20 : 0),
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: isDrawerOpen
-              ? BorderRadius.circular(25)
-              : BorderRadius.circular(0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              offset: Offset(-4, 6),
-              blurRadius: 4,
-            )
+      duration: Duration(milliseconds: 200),
+      // hacemos una transformacion de ejes y una rotacion
+      transform: Matrix4.translationValues(xOffset, yOffset, 0)
+        ..scale(isDrawerOpen ? 0.90 : 1.00)
+        ..rotateZ(isDrawerOpen ? pi / 20 : 0),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius:
+            isDrawerOpen ? BorderRadius.circular(25) : BorderRadius.circular(0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            offset: Offset(-4, 6),
+            blurRadius: 4,
+          )
+        ],
+      ),
+      child: SafeArea(
+        child: Stack(
+          children: [
+            Container(
+              height: size.height,
+              color: Colors.red,
+              child: Image.asset(
+                'assets/images/mapa.jpg',
+                fit: BoxFit.cover,
+              ),
+            ),
+            child,
           ],
         ),
-        child: SafeArea(
-          child: child,
-        ));
+      ),
+    );
   }
 }

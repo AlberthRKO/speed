@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:speed/components/navigator.dart';
 import 'package:speed/components/shakeTransition.dart';
-import 'package:speed/screen/home_screen.dart';
 import 'package:speed/screen/login_screen.dart';
 
 class SelectRol extends StatelessWidget {

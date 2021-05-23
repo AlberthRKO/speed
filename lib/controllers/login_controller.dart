@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:speed/screen/home_screen.dart';
+import 'package:speed/screen/select_page.dart';
+import 'package:speed/utils/progress.dart';
 
 class LoginController extends GetxController {
   // Instanciamos firebase
@@ -17,23 +20,18 @@ class LoginController extends GetxController {
     print(emailController.text + '\n' + passwordController.text);
   }
 
-  /* // validaciones
-  String? validarEmail(String value) {
-    if (!GetUtils.isEmail(value)) {
-      return 'Fomato invalido';
-    }
-    return null;
+  void dispose() {
+    // limpiamos los campos
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
-
-  String validatePass(String value) {
-    if (value.length <= 6)
-      return 'La contraseña debe tener almenos 6 caracteres';
-    return null;
-  } */
 
   // ponemos async porque esperaremos la respuesta del server
   // await sera el que esperara esa resp y seguira con el proceso
   Future<void> loginEmailPassword(context) async {
+    ProgressDialog pr =
+        Progresso.crearProgress(context, 'Espere un momento...');
     // String email = emailController.text;
     // String pass = passwordController.text;
 
@@ -65,6 +63,8 @@ class LoginController extends GetxController {
       print('Formulario invalido');
       return;
     }
+
+    pr.show();
     // usamos un control de errores
     try {
       final User user = (await _auth.signInWithEmailAndPassword(
@@ -74,6 +74,7 @@ class LoginController extends GetxController {
           .user;
 
       String name = emailController.text;
+      pr.hide();
       // mostramos un aviso una ves se aya logeado
       Get.snackbar(
         'Bienvenido a Speed', //titulo
@@ -93,6 +94,7 @@ class LoginController extends GetxController {
     } catch (e) {
       print(e);
       // si fallo mostramos el aviso abajo
+      pr.hide();
       Get.snackbar(
         'Error',
         e.message,
@@ -108,29 +110,36 @@ class LoginController extends GetxController {
   }
 
   // cierre de sesion con aviso
-  void cerrarSesion(context) async {
+  void cerrarSesion(context) {
     // preguntamos si hay una cuenta iniciada
-    final User user = await _auth.currentUser;
-    // si esto esta vacio avisamos
+    final User user = _auth.currentUser;
+    // si esto no esta vacio avisamos
     if (user != null) {
       _signOut();
-      final String uid = user.uid;
+      // final String uid = user.uid;
       Get.snackbar(
         'Sesión finalizada',
-        'Se ha cerradi sesión exitosamente',
+        'Se ha cerrado sesión exitosamente',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Theme.of(context).cardColor,
         colorText: Theme.of(context).hintColor,
       );
-      Get.toNamed('/SelectRol');
+      Future.delayed(
+        Duration(seconds: 2),
+        () => Get.offAll(
+          () => SelectRol(),
+          transition: Transition.zoom,
+        ),
+      );
+    } else {
+      Get.snackbar(
+        'Fallo',
+        'No hay ninguna cuenta iniciada',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Theme.of(context).cardColor,
+        colorText: Theme.of(context).hintColor,
+      );
     }
-    Get.snackbar(
-      'Fallo',
-      'No hay ninguna cuenta iniciada',
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Theme.of(context).cardColor,
-      colorText: Theme.of(context).hintColor,
-    );
     return;
   }
 
