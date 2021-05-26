@@ -9,18 +9,13 @@ import 'package:speed/components/inputForm.dart';
 import 'package:speed/components/shakeTransition.dart';
 import 'package:speed/controllers/login_controller.dart';
 import 'package:speed/screen/register_screen.dart';
-import 'package:speed/theme/themeChange.dart';
 
 class Login extends StatelessWidget {
-  final temaController = Get.put(TemaProvider());
-
-  final _con = Get.put(LoginController());
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return GetBuilder<LoginController>(
-      init: _con,
+      init: LoginController(),
       builder: (_) => Background(
         taman: size.width > 450 ? 750 : 550,
         child: ListView(
@@ -172,8 +167,6 @@ class ReturnBack extends StatelessWidget {
     Key key,
   }) : super(key: key);
 
-  final temaController = Get.put(TemaProvider());
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -198,14 +191,6 @@ class ReturnBack extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-        ),
-        GetBuilder<TemaProvider>(
-          builder: (_) => Switch(
-            value: temaController.isDark,
-            onChanged: (estado) {
-              temaController.cambiarTema(estado);
-            },
           ),
         ),
       ],

@@ -10,6 +10,7 @@ class SplashScreen extends StatelessWidget {
     return GetBuilder(
       init: SplashController(),
       builder: (_) => Scaffold(
+        backgroundColor: Theme.of(context).backgroundColor,
         body: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

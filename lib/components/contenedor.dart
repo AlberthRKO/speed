@@ -40,8 +40,7 @@ class ContenedorAnimado extends StatelessWidget {
         child: Stack(
           children: [
             Container(
-              height: size.height,
-              color: Colors.red,
+              width: size.width * 1,
               child: Image.asset(
                 'assets/images/mapa.jpg',
                 fit: BoxFit.cover,

@@ -5,20 +5,12 @@ import 'package:speed/components/contenedor.dart';
 import 'package:speed/components/sidebar.dart';
 import 'package:speed/controllers/sidebar_controller.dart';
 
-class Home extends StatefulWidget {
-  @override
-  _HomeState createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
+class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      /* appBar: AppBar(
-        elevation: 0,
-        toolbarHeight: size.height * 0,
-      ), */
+      backgroundColor: Theme.of(context).backgroundColor,
       body: Stack(
         children: [
           Sidebar(),

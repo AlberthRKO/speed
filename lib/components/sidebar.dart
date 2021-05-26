@@ -15,6 +15,7 @@ class Sidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TemaProvider().barState();
     Size size = MediaQuery.of(context).size;
     // construimos el builder para el dark o light
     return GetBuilder<TemaProvider>(
@@ -78,7 +79,7 @@ class Sidebar extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Modo ' + _.modo,
+                          'Modo ' + _.typeTheme(),
                         ),
                         Switch(
                           value: _.isDark,

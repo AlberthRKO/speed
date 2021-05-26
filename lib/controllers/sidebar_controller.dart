@@ -18,7 +18,7 @@ class SidebarController extends GetxController {
       yOffset = size.height / 7;
       isDrawerOpen = true;
     }
-    print(isDrawerOpen);
+    // print(isDrawerOpen);
     update();
   }
 }
