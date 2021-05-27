@@ -1,17 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:speed/Models/client.dart';
 import 'package:speed/controllers/cliente_controller.dart';
 import 'package:speed/screen/home_screen.dart';
 import 'package:speed/utils/progress.dart';
 
-class RegisterController extends GetxController {
+class DriverRegisterController extends GetxController {
   // instanciamos auth de firebase
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final formKey = GlobalKey<FormState>();
   final name = TextEditingController();
+  final modelo = TextEditingController();
+  final placa = TextEditingController();
   final email = TextEditingController();
   final password = TextEditingController();
   final passwordConfirm = TextEditingController();

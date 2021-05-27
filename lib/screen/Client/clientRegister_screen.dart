@@ -6,15 +6,15 @@ import 'package:speed/components/background.dart';
 import 'package:speed/components/button.dart';
 import 'package:speed/components/inputForm.dart';
 import 'package:speed/components/shakeTransition.dart';
-import 'package:speed/controllers/register_controller.dart';
+import 'package:speed/controllers/Client/clientRegister_controller.dart';
 import 'package:speed/screen/login_screen.dart';
 
-class Register extends StatelessWidget {
+class ClientRegister extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return GetBuilder<RegisterController>(
-      init: RegisterController(),
+    return GetBuilder<ClientRegisterController>(
+      init: ClientRegisterController(),
       builder: (_) => Background(
         taman: size.width > 450 ? 800 : 650,
         child: ListView(
@@ -51,7 +51,7 @@ class Register extends StatelessWidget {
                                 Container(
                                   width: 230,
                                   child: Text(
-                                    'Create una cuenta para poder acceder a los servicios',
+                                    'Create una cuenta como pasajero para poder acceder a los servicios',
                                     style:
                                         Theme.of(context).textTheme.bodyText2,
                                     textAlign: TextAlign.center,

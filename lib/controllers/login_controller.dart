@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:speed/screen/Client/clientRegister_screen.dart';
+import 'package:speed/screen/Driver/driverRegister_screen.dart';
 import 'package:speed/screen/home_screen.dart';
 import 'package:speed/screen/select_page.dart';
 import 'package:speed/utils/progress.dart';
@@ -9,6 +12,7 @@ import 'package:speed/utils/progress.dart';
 class LoginController extends GetxController {
   // Instanciamos firebase
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final appData = GetStorage();
 
   final formKey = GlobalKey<FormState>();
 
@@ -25,6 +29,28 @@ class LoginController extends GetxController {
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
+  }
+
+  String tipeUser() {
+    String tipo = appData.read('typeUser');
+    if (tipo == 'Client') {
+      return 'pasajero';
+    }
+    return 'conductor';
+  }
+
+  void goRegister() {
+    String tipo = appData.read('typeUser');
+    if (tipo == 'Client')
+      Get.to(
+        () => ClientRegister(),
+        transition: Transition.size,
+      );
+    else
+      Get.to(
+        () => DriverRegister(),
+        transition: Transition.size,
+      );
   }
 
   // ponemos async porque esperaremos la respuesta del server

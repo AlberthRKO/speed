@@ -2,40 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:speed/components/actionAccess.dart';
 import 'package:speed/components/background.dart';
 import 'package:speed/components/button.dart';
 import 'package:speed/components/inputForm.dart';
 import 'package:speed/components/shakeTransition.dart';
-import 'package:speed/controllers/login_controller.dart';
-import 'package:speed/screen/Client/clientRegister_screen.dart';
+import 'package:speed/controllers/Driver/driverRegister_controller.dart';
+import 'package:speed/screen/login_screen.dart';
 
-class Login extends StatelessWidget {
+class DriverRegister extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return GetBuilder<LoginController>(
-      init: LoginController(),
+    return GetBuilder<DriverRegisterController>(
+      init: DriverRegisterController(),
       builder: (_) => Background(
-        taman: size.width > 450 ? 750 : 550,
+        taman: size.width > 450 ? 800 : 650,
         child: ListView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           children: [
             Container(
               width: double.infinity,
-              // height: size.height * 0.96,
               child: Column(
-                // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ReturnBack(),
-                  // widget creado para animacion
                   ShakeTransition(
                     axis: Axis.vertical,
-                    duration: Duration(
-                      milliseconds: 2500,
-                    ),
+                    duration: Duration(milliseconds: 2500),
                     child: SvgPicture.asset(
-                      'assets/images/login.svg',
+                      'assets/images/register.svg',
                       height: size.height > 450 ? size.height * 0.3 : 200,
                     ),
                   ),
@@ -43,157 +37,132 @@ class Login extends StatelessWidget {
                     key: _.formKey,
                     child: BoxForm2(
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // titulo form
                           ShakeTransition(
-                            duration: Duration(milliseconds: 3000),
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  'Login',
+                                  'Registrarse',
                                   style: Theme.of(context).textTheme.headline4,
                                 ),
                                 SizedBox(
                                   height: 3,
                                 ),
-                                Text(
-                                  'Inicia sesión como ' + _.tipeUser(),
-                                  style: Theme.of(context).textTheme.bodyText2,
+                                Container(
+                                  width: 230,
+                                  child: Text(
+                                    'Create una cuenta como conductor para poder acceder a los servicios',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText2,
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
                               ],
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 15,
-                              vertical: 10,
-                            ),
+                                horizontal: 10, vertical: 15),
                             child: ShakeTransition(
                               axis: Axis.vertical,
-                              duration: Duration(
-                                milliseconds: 1500,
-                              ),
-                              typeAnimation: Curves.easeIn,
+                              duration: Duration(milliseconds: 2000),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  // el widget creado lo reutilizamos
                                   InputControl(
-                                    controlador: _.emailController,
+                                    controlador: _.name,
+                                    hint: 'Nombre',
+                                    icon: FontAwesomeIcons.solidUser,
+                                    validar: (value) => value.isEmpty
+                                        ? 'El nombre no puede estar en blanco'
+                                        : ((value.length < 15)
+                                            ? 'El nombre debe tener almenos 15 caracteres'
+                                            : null),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  InputControl(
+                                    controlador: _.modelo,
+                                    hint: 'Modelo',
+                                    icon: FontAwesomeIcons.carSide,
+                                    validar: (value) => value.isEmpty
+                                        ? 'El modelo no puede estar en blanco'
+                                        : ((value.length < 6)
+                                            ? 'El modelo debe tener almenos 6 caracteres'
+                                            : null),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  InputControl(
+                                    controlador: _.placa,
+                                    hint: 'Placa',
+                                    icon: FontAwesomeIcons.car,
+                                    validar: (value) => value.isEmpty
+                                        ? 'La placa no puede estar en blanco'
+                                        : ((value.length < 8)
+                                            ? 'El numero de placa debe tener almenos 8 caracteres'
+                                            : null),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  InputControl(
+                                    controlador: _.email,
                                     hint: 'Email',
-                                    icon: FontAwesomeIcons.solidEnvelope,
+                                    icon: FontAwesomeIcons.solidUser,
                                     validar: (value) => value.isEmpty
                                         ? 'El email no puede estar en blanco'
                                         : ((!GetUtils.isEmail(value))
                                             ? 'Formato de email invalido'
                                             : null),
-                                    // onSaved: (value) => _email = value,
                                   ),
                                   SizedBox(
                                     height: 10,
                                   ),
                                   InputControl2(
-                                    controlador2: _.passwordController,
+                                    controlador2: _.password,
                                     hint: 'Contraseña',
                                     validar: (value) => value.isEmpty
                                         ? 'La contraseña no puede estar en blanco'
                                         : ((value.length < 6)
                                             ? 'La contraseña debe tener almenos 6 caracteres'
                                             : null),
-                                    // onSaved: (value) => _password = value,
                                   ),
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  Container(
-                                    alignment: Alignment.centerRight,
-                                    child: Text(
-                                      'Olvido su contraseña ?',
-                                      style:
-                                          Theme.of(context).textTheme.bodyText2,
-                                    ),
+                                  InputControl2(
+                                    controlador2: _.passwordConfirm,
+                                    hint: 'Confirmar Contraseña',
+                                    validar: (value) => value.isEmpty
+                                        ? 'La contraseña no puede estar en blanco'
+                                        : null,
                                   ),
                                 ],
                               ),
                             ),
                           ),
                           ShakeTransition2(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Button(
-                                  funcion: () async {
-                                    await _.loginEmailPassword(context);
-                                  },
-                                  texto: 'Login',
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                              ],
+                            child: Button(
+                              funcion: () => _.registrarUser(context),
+                              texto: 'Registrar',
+                              color: Theme.of(context).primaryColor,
                             ),
-                          )
+                          ),
                         ],
                       ),
-                      //tamanBox: 0.47,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ShakeTransition(
-                    child: ActionAccess(
-                      typeAnimation: Curves.fastOutSlowIn,
-                      text: 'No tienes una cuenta ?',
-                      textLink: 'Registrate',
-                      funcion: () => _.goRegister(),
                     ),
                   ),
                   SizedBox(
                     height: 20,
-                  )
+                  ),
                 ],
               ),
             ),
           ],
         ),
       ),
-    );
-  }
-}
-
-class ReturnBack extends StatelessWidget {
-  ReturnBack({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        InkWell(
-          onTap: () => Navigator.pop(context),
-          child: Row(
-            children: [
-              IconButton(
-                icon: Icon(
-                  FontAwesomeIcons.arrowLeft,
-                  size: 20,
-                  color: Theme.of(context).accentColor,
-                ),
-                onPressed: () => Navigator.pop(context),
-              ),
-              Text(
-                'Atras',
-                style: TextStyle(
-                  color: Theme.of(context).accentColor,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }

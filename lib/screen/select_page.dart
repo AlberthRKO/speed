@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:speed/components/navigator.dart';
 import 'package:speed/components/shakeTransition.dart';
+import 'package:speed/controllers/selectPage_controller.dart';
 import 'package:speed/screen/login_screen.dart';
 
 class SelectRol extends StatelessWidget {
@@ -87,29 +89,32 @@ class SelectRol extends StatelessWidget {
                 // le ponemos un inkell para que cuando presione
                 // nos mande a otra vista con el tap
                 ShakeTransition2(
-                  child: NavigatorLink(
-                    vista: Login(),
-                    child: Container(
-                      height: size.height * 0.3,
-                      width: 200,
-                      decoration: estiloImagen(context),
-                      child: Column(
-                        children: [
-                          Expanded(
-                            flex: 7,
-                            child: SvgPicture.asset(
-                              'assets/images/cliente.svg',
-                              width: 160,
+                  child: GetBuilder<SelectUser>(
+                    init: SelectUser(),
+                    builder: (_) => NavigatorLink(
+                      funcion: () => _.goLogin('Client'),
+                      child: Container(
+                        height: size.height * 0.3,
+                        width: 200,
+                        decoration: estiloImagen(context),
+                        child: Column(
+                          children: [
+                            Expanded(
+                              flex: 7,
+                              child: SvgPicture.asset(
+                                'assets/images/cliente.svg',
+                                width: 160,
+                              ),
                             ),
-                          ),
-                          Expanded(
-                            flex: 2,
-                            child: Text(
-                              'Cliente',
-                              style: Theme.of(context).textTheme.headline3,
-                            ),
-                          )
-                        ],
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                'Cliente',
+                                style: Theme.of(context).textTheme.headline3,
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -123,29 +128,32 @@ class SelectRol extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 ShakeTransition(
-                  child: NavigatorLink(
-                    vista: Login(),
-                    child: Container(
-                      width: 200,
-                      height: size.height * 0.3,
-                      decoration: estiloImagen(context),
-                      child: Column(
-                        children: [
-                          Expanded(
-                            flex: 7,
-                            child: SvgPicture.asset(
-                              'assets/images/conductor.svg',
-                              width: 160,
+                  child: GetBuilder<SelectUser>(
+                    init: SelectUser(),
+                    builder: (_) => NavigatorLink(
+                      funcion: () => _.goLogin('Driver'),
+                      child: Container(
+                        width: 200,
+                        height: size.height * 0.3,
+                        decoration: estiloImagen(context),
+                        child: Column(
+                          children: [
+                            Expanded(
+                              flex: 7,
+                              child: SvgPicture.asset(
+                                'assets/images/conductor.svg',
+                                width: 160,
+                              ),
                             ),
-                          ),
-                          Expanded(
-                            flex: 2,
-                            child: Text(
-                              'Conductor',
-                              style: Theme.of(context).textTheme.headline3,
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                'Conductor',
+                                style: Theme.of(context).textTheme.headline3,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
