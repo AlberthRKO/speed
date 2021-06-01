@@ -1,11 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:progress_dialog/progress_dialog.dart';
-import 'package:speed/Models/client.dart';
-import 'package:speed/controllers/cliente_controller.dart';
-import 'package:speed/screen/home_screen.dart';
+import 'package:speed/Models/driver.dart';
+import 'package:speed/controllers/Driver/driver_controller.dart';
+import 'package:speed/screen/Driver/homeDriver_screen.dart';
 import 'package:speed/utils/progress.dart';
 
 class DriverRegisterController extends GetxController {
@@ -24,6 +23,8 @@ class DriverRegisterController extends GetxController {
 
   void mostrar() {
     print(name.text);
+    print(modelo.text);
+    print(placa.text);
     print(email.text);
     print(password.text);
     print(passwordConfirm.text);
@@ -32,6 +33,8 @@ class DriverRegisterController extends GetxController {
   void dispose() {
     // limpiamos los campos
     name.dispose();
+    modelo.dispose();
+    placa.dispose();
     email.dispose();
     password.dispose();
     passwordConfirm.dispose();
@@ -40,6 +43,8 @@ class DriverRegisterController extends GetxController {
 
   Future<void> registrarUser(context) async {
     String nombre = name.text;
+    String model = modelo.text;
+    String placaa = placa.text;
     String emaill = email.text;
     String pass = password.text;
     String passCon = passwordConfirm.text;
@@ -86,14 +91,16 @@ class DriverRegisterController extends GetxController {
 
       // preguntamos si existe usuario
       if (user != null) {
-        Client client = new Client(
+        Driver driver = new Driver(
           id: user.uid,
           username: nombre,
+          modelo: model,
+          placa: placaa,
           email: emaill,
           password: pass,
         );
 
-        await ClientController().create(client);
+        await DriverController().create(driver);
         pr.hide();
         Get.snackbar(
           'Registro Exitoso', //titulo
@@ -106,8 +113,8 @@ class DriverRegisterController extends GetxController {
         print(user.uid);
         Future.delayed(
           Duration(seconds: 2),
-          () => Get.to(
-            () => Home(),
+          () => Get.offAll(
+            () => HomeDriver(),
             transition: Transition.downToUp,
           ),
         );

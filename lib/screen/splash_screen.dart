@@ -7,7 +7,7 @@ import 'package:speed/controllers/splash_controller.dart';
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder(
+    return GetBuilder<SplashController>(
       init: SplashController(),
       builder: (_) => Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,

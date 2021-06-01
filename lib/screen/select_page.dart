@@ -4,9 +4,8 @@ import 'package:get/get.dart';
 import 'package:speed/components/navigator.dart';
 import 'package:speed/components/shakeTransition.dart';
 import 'package:speed/controllers/selectPage_controller.dart';
-import 'package:speed/screen/login_screen.dart';
 
-class SelectRol extends StatelessWidget {
+class SelectUSer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -89,8 +88,8 @@ class SelectRol extends StatelessWidget {
                 // le ponemos un inkell para que cuando presione
                 // nos mande a otra vista con el tap
                 ShakeTransition2(
-                  child: GetBuilder<SelectUser>(
-                    init: SelectUser(),
+                  child: GetBuilder<SelectUserController>(
+                    init: SelectUserController(),
                     builder: (_) => NavigatorLink(
                       funcion: () => _.goLogin('Client'),
                       child: Container(
@@ -128,8 +127,8 @@ class SelectRol extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 ShakeTransition(
-                  child: GetBuilder<SelectUser>(
-                    init: SelectUser(),
+                  child: GetBuilder<SelectUserController>(
+                    init: SelectUserController(),
                     builder: (_) => NavigatorLink(
                       funcion: () => _.goLogin('Driver'),
                       child: Container(

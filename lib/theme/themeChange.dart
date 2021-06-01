@@ -5,11 +5,16 @@ import 'package:get_storage/get_storage.dart';
 
 class TemaProvider extends GetxController {
   final appData = GetStorage();
-  final appStyle = GetStorage();
   bool get isDark => appData.read('darkmode') ?? false;
   ThemeData get theme => isDark ? temaDark() : temaLight();
 
   String typeTheme() => isDark ? 'Oscuro' : 'Claro';
+
+  @override
+  void onReady() {
+    super.onReady();
+    barState();
+  }
 
   void barState() {
     if (isDark)
@@ -176,45 +181,14 @@ class TemaProvider extends GetxController {
   // recibimos el estado y preguntamos envase a lo que sea se ejecute el tema
   void cambiarTema(bool estado) {
     appData.write('darkmode', estado);
-    if (isDark)
+    /* if (isDark)
       FlutterStatusbarManager.setStyle(StatusBarStyle.LIGHT_CONTENT);
     else
-      FlutterStatusbarManager.setStyle(StatusBarStyle.DARK_CONTENT);
+      FlutterStatusbarManager.setStyle(StatusBarStyle.DARK_CONTENT); */
 
     /* print(isDarkk);
     print(modo); */
     // hacemos un update en el getX para que lee los cambios
     update();
   }
-
-  /* // Indicamos que el metodo oninit que es el que empieza
-  //la app cargue la preferencia
-
-  @override
-  void onInit() {
-    // 
-    cargarPreferencias().then((value) => cargarTema());
-    super.onInit();
-  }
-
-  void cargarTema() {
-    String prefkey = "isDarkModeKey";
-    bool isDarkMoode = preferences.getBool(prefkey);
-    if (isDarkMoode == null) {
-      preferences.setBool(prefkey, false);
-      isDarkMoode = false;
-    }
-
-    isDarkMoode ? temaDark() : temaLight();
-  }
-
-  // Creamos el metodo con la variable future
-  // indicamos que es un metodo asincrono asique lo que devuleve tambien debe serlo
-  Future<void> cargarPreferencias() async {
-    preferences = await Get.putAsync<SharedPreferences>(
-      () async => SharedPreferences.getInstance(),
-    );
-  }
-
-  // esto inicializa nuestra instancia de preferencias */
 }

@@ -5,8 +5,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:speed/screen/Client/clientRegister_screen.dart';
 import 'package:speed/screen/Driver/driverRegister_screen.dart';
-import 'package:speed/screen/home_screen.dart';
-import 'package:speed/screen/select_page.dart';
+import 'package:speed/screen/Client/home_screen.dart';
+import 'package:speed/screen/Driver/homeDriver_screen.dart';
 import 'package:speed/utils/progress.dart';
 
 class LoginController extends GetxController {
@@ -19,6 +19,8 @@ class LoginController extends GetxController {
   // creamos las variables para capturar la info de los texfield
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+
+  String get tipo => appData.read('typeUser');
 
   void mostrar() {
     print(emailController.text + '\n' + passwordController.text);
@@ -40,7 +42,6 @@ class LoginController extends GetxController {
   }
 
   void goRegister() {
-    String tipo = appData.read('typeUser');
     if (tipo == 'Client')
       Get.to(
         () => ClientRegister(),
@@ -51,6 +52,22 @@ class LoginController extends GetxController {
         () => DriverRegister(),
         transition: Transition.size,
       );
+  }
+
+  void isLogin() {
+    FirebaseAuth.instance.authStateChanges().listen(
+      (User user) {
+        if (user != null) {
+          print('Usuario logeado');
+          if (tipo == 'Client')
+            Get.off(() => Home());
+          else
+            Get.off(() => HomeDriver());
+        } else {
+          print('Usuario no logeado');
+        }
+      },
+    );
   }
 
   // ponemos async porque esperaremos la respuesta del server
@@ -98,25 +115,39 @@ class LoginController extends GetxController {
         password: passwordController.text.trim(),
       ))
           .user;
-
       String name = emailController.text;
-      pr.hide();
+      if (user != null) {
+        pr.hide();
+        Get.snackbar(
+          'Bienvenido a Speed', //titulo
+          'Su cuenta $name, ingreso correctamente',
+          backgroundColor: Theme.of(context).cardColor,
+          colorText: Theme.of(context).hintColor,
+        );
+        print('Login correcto');
+        // hacemos un delay de 2 s y que acceda a la vista
+        Future.delayed(
+          Duration(seconds: 2),
+          () {
+            if (tipo == 'Client') {
+              Get.offAll(
+                () => Home(),
+                transition: Transition.upToDown,
+              );
+            } else {
+              Get.offAll(
+                () => HomeDriver(),
+                transition: Transition.downToUp,
+              );
+            }
+          },
+        );
+      } else {
+        print('Hubo un error de login');
+        pr.hide();
+      }
       // mostramos un aviso una ves se aya logeado
-      Get.snackbar(
-        'Bienvenido a Speed', //titulo
-        'Su cuenta $name, ingreso correctamente',
-        backgroundColor: Theme.of(context).cardColor,
-        colorText: Theme.of(context).hintColor,
-      );
-      print('Login correcto');
-      // hacemos un delay de 2 s y que acceda a la vista
-      Future.delayed(
-        Duration(seconds: 2),
-        () => Get.to(
-          () => Home(),
-          transition: Transition.upToDown,
-        ),
-      );
+
     } catch (e) {
       print(e);
       // si fallo mostramos el aviso abajo
@@ -129,44 +160,6 @@ class LoginController extends GetxController {
         colorText: Theme.of(context).hintColor,
       );
     }
-  }
-
-  void _signOut() async {
-    await _auth.signOut();
-  }
-
-  // cierre de sesion con aviso
-  void cerrarSesion(context) {
-    // preguntamos si hay una cuenta iniciada
-    final User user = _auth.currentUser;
-    // si esto no esta vacio avisamos
-    if (user != null) {
-      _signOut();
-      // final String uid = user.uid;
-      Get.snackbar(
-        'Sesión finalizada',
-        'Se ha cerrado sesión exitosamente',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Theme.of(context).cardColor,
-        colorText: Theme.of(context).hintColor,
-      );
-      Future.delayed(
-        Duration(seconds: 2),
-        () => Get.offAll(
-          () => SelectRol(),
-          transition: Transition.zoom,
-        ),
-      );
-    } else {
-      Get.snackbar(
-        'Fallo',
-        'No hay ninguna cuenta iniciada',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Theme.of(context).cardColor,
-        colorText: Theme.of(context).hintColor,
-      );
-    }
-    return;
   }
 
   void snackError({@required title, @required msg}) {

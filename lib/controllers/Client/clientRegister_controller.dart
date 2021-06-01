@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:speed/Models/client.dart';
-import 'package:speed/controllers/cliente_controller.dart';
-import 'package:speed/screen/home_screen.dart';
+import 'package:speed/controllers/Client/cliente_controller.dart';
+import 'package:speed/screen/Client/home_screen.dart';
 import 'package:speed/utils/progress.dart';
 
 class ClientRegisterController extends GetxController {
@@ -103,7 +103,7 @@ class ClientRegisterController extends GetxController {
         print(user.uid);
         Future.delayed(
           Duration(seconds: 2),
-          () => Get.to(
+          () => Get.offAll(
             () => Home(),
             transition: Transition.downToUp,
           ),

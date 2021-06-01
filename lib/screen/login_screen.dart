@@ -8,7 +8,6 @@ import 'package:speed/components/button.dart';
 import 'package:speed/components/inputForm.dart';
 import 'package:speed/components/shakeTransition.dart';
 import 'package:speed/controllers/login_controller.dart';
-import 'package:speed/screen/Client/clientRegister_screen.dart';
 
 class Login extends StatelessWidget {
   @override

@@ -5,18 +5,19 @@ import 'package:speed/components/contenedor.dart';
 import 'package:speed/components/sidebar.dart';
 import 'package:speed/controllers/sidebar_controller.dart';
 
-class Home extends StatelessWidget {
+class HomeDriver extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
-      body: Stack(
-        children: [
-          Sidebar(),
-          GetBuilder<SidebarController>(
-            init: SidebarController(),
-            builder: (_) => ContenedorAnimado(
+
+    return GetBuilder<SidebarController>(
+      init: SidebarController(),
+      builder: (_) => Scaffold(
+        backgroundColor: Theme.of(context).backgroundColor,
+        body: Stack(
+          children: [
+            Sidebar(),
+            ContenedorAnimado(
               isDrawerOpen: _.isDrawerOpen,
               xOffset: _.xOffset,
               yOffset: _.yOffset,
@@ -36,7 +37,7 @@ class Home extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          'Speed',
+                          'Conductor',
                           style: Theme.of(context).textTheme.headline6,
                         ),
                         IconButton(
@@ -53,8 +54,8 @@ class Home extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

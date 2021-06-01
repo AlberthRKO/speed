@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:speed/components/avatar.dart';
 import 'package:speed/components/menuOption.dart';
-import 'package:speed/controllers/login_controller.dart';
+import 'package:speed/controllers/sidebar_controller.dart';
 import 'package:speed/theme/themeChange.dart';
 
 class Sidebar extends StatelessWidget {
@@ -102,8 +102,8 @@ class Sidebar extends StatelessWidget {
                     ),
                   ],
                 ),
-                GetBuilder<LoginController>(
-                  init: LoginController(),
+                GetBuilder<SidebarController>(
+                  init: SidebarController(),
                   builder: (_) => MenuOption(
                     link: () => _.cerrarSesion(context),
                     icono: FontAwesomeIcons.signOutAlt,
