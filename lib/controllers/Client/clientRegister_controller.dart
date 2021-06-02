@@ -83,13 +83,15 @@ class ClientRegisterController extends GetxController {
 
       // preguntamos si existe usuario
       if (user != null) {
+        // llenamos el modelo con los datos de la vista
         Client client = new Client(
           id: user.uid,
           username: nombre,
           email: emaill,
           password: pass,
         );
-
+        // creamos el modelo con esos datos que se paso al modelo client
+        // y pasamos el client entero
         await ClientController().create(client);
         pr.hide();
         Get.snackbar(

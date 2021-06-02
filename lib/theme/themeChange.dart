@@ -16,11 +16,11 @@ class TemaProvider extends GetxController {
     barState();
   }
 
-  void barState() {
+  Future<void> barState() {
     if (isDark)
-      FlutterStatusbarManager.setStyle(StatusBarStyle.LIGHT_CONTENT);
+      return FlutterStatusbarManager.setStyle(StatusBarStyle.LIGHT_CONTENT);
     else
-      FlutterStatusbarManager.setStyle(StatusBarStyle.DARK_CONTENT);
+      return FlutterStatusbarManager.setStyle(StatusBarStyle.DARK_CONTENT);
   }
 
   // String prefkey = "isDarkModeKey";

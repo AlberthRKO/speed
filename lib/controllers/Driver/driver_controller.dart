@@ -7,10 +7,26 @@ class DriverController extends GetxController {
       FirebaseFirestore.instance.collection('Drivers');
 
   Future<void> create(Driver driver) {
+    String errorMsg;
     try {
-      _reference.doc(driver.id).set(driver.toJson());
+      return _reference.doc(driver.id).set(driver.toJson());
     } catch (e) {
       print(e);
+      errorMsg = e.code;
+    }
+    if (errorMsg != null) {
+      Future.error(errorMsg);
+    }
+  }
+
+  Future<Driver> getById(String id) async {
+    DocumentSnapshot documentSnapshot = await _reference.doc(id).get();
+
+    if (documentSnapshot.exists) {
+      Driver driver = Driver.fromJson(documentSnapshot.data());
+      return driver;
+    } else {
+      return null;
     }
   }
 }

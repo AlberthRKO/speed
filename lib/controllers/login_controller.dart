@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:speed/Models/client.dart';
+import 'package:speed/Models/driver.dart';
+import 'package:speed/controllers/Client/cliente_controller.dart';
+import 'package:speed/controllers/Driver/driver_controller.dart';
 import 'package:speed/screen/Client/clientRegister_screen.dart';
 import 'package:speed/screen/Driver/driverRegister_screen.dart';
 import 'package:speed/screen/Client/home_screen.dart';
@@ -70,6 +74,13 @@ class LoginController extends GetxController {
     );
   }
 
+  void _signOut() async {
+    await _auth.signOut();
+  }
+
+  // PAra averiguar si el usuario es driver o client preguntaremos
+  //si su uid existe en la coleccion
+
   // ponemos async porque esperaremos la respuesta del server
   // await sera el que esperara esa resp y seguira con el proceso
   Future<void> loginEmailPassword(context) async {
@@ -84,22 +95,7 @@ class LoginController extends GetxController {
         msg: 'Los campos no pueden estar vacios',
       );
       return;
-    }
-    if (!GetUtils.isEmail(email)) {
-      snackError(
-        title: 'Error',
-        msg: 'Formato de email invalido',
-      );
-      return;
-    }
-
-    if (pass.length <= 6) {
-      snackError(
-        title: 'Error',
-        msg: 'La contraseña debe tener almenos 6 caracteres',
-      );
-      return;
-    } */
+    }**/
     if (formKey.currentState.validate()) {
       print('Formulario valido');
     } else {
@@ -115,36 +111,79 @@ class LoginController extends GetxController {
         password: passwordController.text.trim(),
       ))
           .user;
-      String name = emailController.text;
+      // String name = emailController.text;
+      // preguntamos si ubo login
       if (user != null) {
         pr.hide();
-        Get.snackbar(
-          'Bienvenido a Speed', //titulo
-          'Su cuenta $name, ingreso correctamente',
-          backgroundColor: Theme.of(context).cardColor,
-          colorText: Theme.of(context).hintColor,
-        );
-        print('Login correcto');
-        // hacemos un delay de 2 s y que acceda a la vista
-        Future.delayed(
-          Duration(seconds: 2),
-          () {
-            if (tipo == 'Client') {
-              Get.offAll(
-                () => Home(),
-                transition: Transition.upToDown,
-              );
-            } else {
-              Get.offAll(
-                () => HomeDriver(),
-                transition: Transition.downToUp,
-              );
-            }
-          },
-        );
+        // si es de tipo client obtenemos el modelo en base al uid del login
+        if (tipo == 'Client') {
+          Client client = await ClientController().getById(user.uid);
+          if (client != null) {
+            String nombre = client.username;
+            Get.snackbar(
+              'Bienvenido a Speed', //titulo
+              'Su cuenta $nombre como ' +
+                  tipeUser() +
+                  ', ingreso correctamente',
+              backgroundColor: Theme.of(context).cardColor,
+              // icon: Icon(FontAwesomeIcons.solidLaughWink),
+              colorText: Theme.of(context).hintColor,
+            );
+            print('Login correcto');
+            // hacemos un delay de 2 s y que acceda a la vista
+            Future.delayed(
+              Duration(seconds: 2),
+              () {
+                Get.offAll(
+                  () => Home(),
+                  transition: Transition.upToDown,
+                );
+              },
+            );
+            // si no pillamos el modelo es xq n fue client el del login
+            //y n se lo encontro en la db
+          } else {
+            snackError(title: 'Error', msg: 'El acceso no es valido');
+            _signOut();
+            return;
+          }
+        } else if (tipo == 'Driver') {
+          Driver driver = await DriverController().getById(user.uid);
+          if (driver != null) {
+            String nombre = driver.username;
+            Get.snackbar(
+              'Bienvenido a Speed', //titulo
+              'Su cuenta $nombre como ' +
+                  tipeUser() +
+                  ', ingreso correctamente',
+              backgroundColor: Theme.of(context).cardColor,
+              // icon: Icon(FontAwesomeIcons.solidLaughWink),
+              colorText: Theme.of(context).hintColor,
+            );
+            print('Login correcto driver');
+            // hacemos un delay de 2 s y que acceda a la vista
+            Future.delayed(
+              Duration(seconds: 2),
+              () {
+                Get.offAll(
+                  () => HomeDriver(),
+                  transition: Transition.downToUp,
+                );
+              },
+            );
+          } else {
+            snackError(title: 'Error', msg: 'El acceso no es valido');
+            _signOut();
+            return;
+          }
+        }
       } else {
         print('Hubo un error de login');
         pr.hide();
+        snackError(
+          title: 'Error',
+          msg: 'Hubo un error de login',
+        );
       }
       // mostramos un aviso una ves se aya logeado
 
@@ -156,6 +195,7 @@ class LoginController extends GetxController {
         'Error',
         e.message,
         snackPosition: SnackPosition.BOTTOM,
+        // icon: Icon(FontAwesomeIcons.exclamation),
         backgroundColor: Theme.of(context).cardColor,
         colorText: Theme.of(context).hintColor,
       );
@@ -166,6 +206,7 @@ class LoginController extends GetxController {
     return Get.snackbar(
       title,
       msg,
+      // icon: Icon(FontAwesomeIcons.exclamation),
       snackPosition: SnackPosition.BOTTOM,
       backgroundColor: Colors.red[400],
     );
