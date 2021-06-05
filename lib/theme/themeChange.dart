@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:speed/controllers/Client/clientMap_controller.dart';
 
 class TemaProvider extends GetxController {
   final appData = GetStorage();

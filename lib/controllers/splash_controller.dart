@@ -13,7 +13,7 @@ class SplashController extends GetxController {
         // preguntamos si hay un usuario logeado
         LoginController().isLogin();
         // avanzamos a la pagina y eliminamos la anterior osea esta
-        Get.to(
+        Get.offAll(
           () => SelectUSer(),
           transition: Transition.zoom,
         );

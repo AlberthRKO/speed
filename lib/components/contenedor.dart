@@ -17,7 +17,6 @@ class ContenedorAnimado extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return AnimatedContainer(
       duration: Duration(milliseconds: 200),
       // hacemos una transformacion de ejes y una rotacion
@@ -37,18 +36,7 @@ class ContenedorAnimado extends StatelessWidget {
         ],
       ),
       child: SafeArea(
-        child: Stack(
-          children: [
-            Container(
-              width: size.width * 1,
-              child: Image.asset(
-                'assets/images/mapa.jpg',
-                fit: BoxFit.cover,
-              ),
-            ),
-            child,
-          ],
-        ),
+        child: child,
       ),
     );
   }
