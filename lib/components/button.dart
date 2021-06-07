@@ -15,7 +15,9 @@ class Button extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 200,
+      height: 40,
       decoration: BoxDecoration(
+        color: color,
         borderRadius: BorderRadius.circular(25),
         boxShadow: [
           BoxShadow(
@@ -27,9 +29,7 @@ class Button extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
-        child: FlatButton(
-          padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-          color: color,
+        child: TextButton(
           onPressed: funcion,
           child: Text(
             texto,

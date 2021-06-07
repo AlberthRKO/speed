@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:speed/components/button.dart';
 import 'package:speed/components/contenedor.dart';
 import 'package:speed/components/sidebar.dart';
 import 'package:speed/controllers/Client/clientMap_controller.dart';
@@ -40,23 +41,26 @@ class Home extends StatelessWidget {
         TemaProvider().barState();
         return Stack(
           children: [
-            Container(
-              width: size.width * 1,
-              child: GoogleMap(
-                mapType: MapType.normal,
-                myLocationEnabled: true,
-                myLocationButtonEnabled: true,
-                initialCameraPosition: _.initialPosition,
-                zoomControlsEnabled: true,
-                zoomGesturesEnabled: true,
-                onMapCreated: _.onMapCreate,
-              ),
+            GoogleMap(
+              mapType: MapType.normal,
+              myLocationEnabled: true,
+              myLocationButtonEnabled: true,
+              initialCameraPosition: _.initialPosition,
+              zoomControlsEnabled: true,
+              zoomGesturesEnabled: true,
+              onMapCreated: _.onMapCreate,
             ),
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Row(
+            Padding(
+              padding: EdgeInsets.only(
+                top: 8,
+                left: 8,
+                right: 8,
+                bottom: 25,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton(
@@ -68,7 +72,7 @@ class Home extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Speed',
+                        'Conductor',
                         style: Theme.of(context).textTheme.headline6,
                       ),
                       IconButton(
@@ -81,8 +85,13 @@ class Home extends StatelessWidget {
                       ),
                     ],
                   ),
-                ),
-              ],
+                  Button(
+                    texto: 'Solicitar Viaje',
+                    color: Theme.of(context).primaryColor,
+                    funcion: () {},
+                  ),
+                ],
+              ),
             ),
           ],
         );

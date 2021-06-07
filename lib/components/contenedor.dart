@@ -18,7 +18,7 @@ class ContenedorAnimado extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      duration: Duration(milliseconds: 200),
+      duration: Duration(milliseconds: 150),
       // hacemos una transformacion de ejes y una rotacion
       transform: Matrix4.translationValues(xOffset, yOffset, 0)
         ..scale(isDrawerOpen ? 0.90 : 1.00)
