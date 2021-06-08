@@ -27,6 +27,8 @@ dependencies:
   firebase_messaging: ^10.0.0
   progress_dialog: ^1.2.4
   google_maps_flutter: ^2.0.6
+  geolocator: ^7.0.3
+  location: ^4.2.1
 
 dev_dependencies:
   flutter_test:

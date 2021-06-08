@@ -14,88 +14,84 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     TemaProvider().barState();
-    return GetBuilder<SidebarController>(
-      init: SidebarController(),
-      builder: (_menu) => Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
-        body: Stack(
-          children: [
-            Sidebar(),
-            ContenedorAnimado(
-              isDrawerOpen: _menu.isDrawerOpen,
-              xOffset: _menu.xOffset,
-              yOffset: _menu.yOffset,
-              child: mapaUser(size, _menu, context),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget mapaUser(Size size, SidebarController _menu, BuildContext context) {
     return GetBuilder<ClientMapController>(
-      init: ClientMapController(),
-      builder: (_) {
-        _.setMapStyle();
-        TemaProvider().barState();
-        return Stack(
-          children: [
-            GoogleMap(
-              mapType: MapType.normal,
-              myLocationEnabled: true,
-              myLocationButtonEnabled: true,
-              initialCameraPosition: _.initialPosition,
-              zoomControlsEnabled: true,
-              zoomGesturesEnabled: true,
-              onMapCreated: _.onMapCreate,
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                top: 8,
-                left: 8,
-                right: 8,
-                bottom: 25,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                        onPressed: () => _menu.abrirSidebar(size),
-                        icon: Icon(
-                          FontAwesomeIcons.bars,
-                          size: 20,
-                          color: Theme.of(context).hintColor,
+        init: ClientMapController(),
+        builder: (_) {
+          _.setMapStyle();
+          TemaProvider().barState();
+          return Scaffold(
+            key: _.key,
+            backgroundColor: Theme.of(context).backgroundColor,
+            body: Stack(
+              children: [
+                Sidebar(),
+                GetBuilder<SidebarController>(
+                  init: SidebarController(),
+                  builder: (_menu) => ContenedorAnimado(
+                    isDrawerOpen: _menu.isDrawerOpen,
+                    xOffset: _menu.xOffset,
+                    yOffset: _menu.yOffset,
+                    child: Stack(
+                      children: [
+                        GoogleMap(
+                          mapType: MapType.normal,
+                          initialCameraPosition: _.initialPosition,
+                          onMapCreated: _.onMapCreate,
+                          myLocationEnabled: true,
+                          myLocationButtonEnabled: false,
                         ),
-                      ),
-                      Text(
-                        'Conductor',
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                      IconButton(
-                        onPressed: () => _.volver(),
-                        icon: Icon(
-                          FontAwesomeIcons.searchLocation,
-                          size: 20,
-                          color: Theme.of(context).hintColor,
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: 8,
+                            left: 8,
+                            right: 8,
+                            bottom: 25,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  IconButton(
+                                    onPressed: () => _menu.abrirSidebar(size),
+                                    icon: Icon(
+                                      FontAwesomeIcons.bars,
+                                      size: 20,
+                                      color: Theme.of(context).hintColor,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Pasajero',
+                                    style:
+                                        Theme.of(context).textTheme.headline6,
+                                  ),
+                                  IconButton(
+                                    onPressed: () => _.volver(),
+                                    icon: Icon(
+                                      FontAwesomeIcons.searchLocation,
+                                      size: 20,
+                                      color: Theme.of(context).hintColor,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Button(
+                                texto: 'Solicitar Viaje',
+                                color: Theme.of(context).primaryColor,
+                                funcion: () {},
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                  Button(
-                    texto: 'Solicitar Viaje',
-                    color: Theme.of(context).primaryColor,
-                    funcion: () {},
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        );
-      },
-    );
+          );
+        });
   }
 }

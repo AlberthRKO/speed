@@ -65,8 +65,9 @@ class LoginController extends GetxController {
           print('Usuario logeado');
           if (tipo == 'Client')
             Get.off(() => Home());
-          else
+          else if (tipo == 'Driver') {
             Get.off(() => HomeDriver());
+          }
         } else {
           print('Usuario no logeado');
         }
