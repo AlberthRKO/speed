@@ -15,83 +15,82 @@ class Home extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     TemaProvider().barState();
     return GetBuilder<ClientMapController>(
-        init: ClientMapController(),
-        builder: (_) {
-          _.setMapStyle();
-          TemaProvider().barState();
-          return Scaffold(
-            key: _.key,
-            backgroundColor: Theme.of(context).backgroundColor,
-            body: Stack(
-              children: [
-                Sidebar(),
-                GetBuilder<SidebarController>(
-                  init: SidebarController(),
-                  builder: (_menu) => ContenedorAnimado(
-                    isDrawerOpen: _menu.isDrawerOpen,
-                    xOffset: _menu.xOffset,
-                    yOffset: _menu.yOffset,
-                    child: Stack(
-                      children: [
-                        GoogleMap(
-                          mapType: MapType.normal,
-                          initialCameraPosition: _.initialPosition,
-                          onMapCreated: _.onMapCreate,
-                          myLocationEnabled: true,
-                          myLocationButtonEnabled: false,
+      init: ClientMapController(),
+      builder: (_) {
+        _.setMapStyle();
+        TemaProvider().barState();
+        return Scaffold(
+          key: _.key,
+          backgroundColor: Theme.of(context).backgroundColor,
+          body: Stack(
+            children: [
+              Sidebar(),
+              GetBuilder<SidebarController>(
+                init: SidebarController(),
+                builder: (_menu) => ContenedorAnimado(
+                  isDrawerOpen: _menu.isDrawerOpen,
+                  xOffset: _menu.xOffset,
+                  yOffset: _menu.yOffset,
+                  child: Stack(
+                    children: [
+                      GoogleMap(
+                        mapType: MapType.normal,
+                        initialCameraPosition: _.initialPosition,
+                        onMapCreated: _.onMapCreate,
+                        myLocationEnabled: true,
+                        myLocationButtonEnabled: false,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: 8,
+                          left: 8,
+                          right: 8,
+                          bottom: 25,
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: 8,
-                            left: 8,
-                            right: 8,
-                            bottom: 25,
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  IconButton(
-                                    onPressed: () => _menu.abrirSidebar(size),
-                                    icon: Icon(
-                                      FontAwesomeIcons.bars,
-                                      size: 20,
-                                      color: Theme.of(context).hintColor,
-                                    ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                IconButton(
+                                  onPressed: () => _menu.abrirSidebar(size),
+                                  icon: Icon(
+                                    FontAwesomeIcons.bars,
+                                    size: 20,
+                                    color: Theme.of(context).hintColor,
                                   ),
-                                  Text(
-                                    'Pasajero',
-                                    style:
-                                        Theme.of(context).textTheme.headline6,
+                                ),
+                                Text(
+                                  'Pasajero',
+                                  style: Theme.of(context).textTheme.headline6,
+                                ),
+                                IconButton(
+                                  onPressed: () => _.volver(),
+                                  icon: Icon(
+                                    FontAwesomeIcons.searchLocation,
+                                    size: 20,
+                                    color: Theme.of(context).hintColor,
                                   ),
-                                  IconButton(
-                                    onPressed: () => _.volver(),
-                                    icon: Icon(
-                                      FontAwesomeIcons.searchLocation,
-                                      size: 20,
-                                      color: Theme.of(context).hintColor,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Button(
-                                texto: 'Solicitar Viaje',
-                                color: Theme.of(context).primaryColor,
-                                funcion: () {},
-                              ),
-                            ],
-                          ),
+                                ),
+                              ],
+                            ),
+                            Button(
+                              texto: 'Solicitar Viaje',
+                              color: Theme.of(context).primaryColor,
+                              funcion: () {},
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          );
-        });
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

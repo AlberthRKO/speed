@@ -2,41 +2,46 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:speed/components/button.dart';
 import 'package:speed/components/contenedor.dart';
 import 'package:speed/components/sidebar.dart';
 import 'package:speed/controllers/Driver/driverMap_controller.dart';
 import 'package:speed/controllers/sidebar_controller.dart';
+import 'package:speed/theme/themeChange.dart';
 
 class HomeDriver extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return GetBuilder<SidebarController>(
-      init: SidebarController(),
-      builder: (_menu) => Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
-        body: Stack(
-          children: [
-            Sidebar(),
-            ContenedorAnimado(
-              isDrawerOpen: _menu.isDrawerOpen,
-              xOffset: _menu.xOffset,
-              yOffset: _menu.yOffset,
-              child: GetBuilder<DriverMapController>(
-                init: DriverMapController(),
-                builder: (_) {
-                  _.setMapStyle();
-                  return Stack(
+    return GetBuilder<DriverMapController>(
+      init: DriverMapController(),
+      builder: (_) {
+        _.setMapStyle();
+        TemaProvider().barState();
+        return Scaffold(
+          backgroundColor: Theme.of(context).backgroundColor,
+          body: Stack(
+            children: [
+              Sidebar(),
+              GetBuilder<SidebarController>(
+                init: SidebarController(),
+                builder: (_menu) => ContenedorAnimado(
+                  isDrawerOpen: _menu.isDrawerOpen,
+                  xOffset: _menu.xOffset,
+                  yOffset: _menu.yOffset,
+                  child: Stack(
                     children: [
                       GoogleMap(
                         mapType: MapType.normal,
-                        myLocationEnabled: true,
-                        myLocationButtonEnabled: true,
                         initialCameraPosition: _.initialPosition,
-                        zoomControlsEnabled: true,
-                        zoomGesturesEnabled: true,
                         onMapCreated: _.onMapCreate,
+                        myLocationEnabled: false,
+                        myLocationButtonEnabled: false,
+                        zoomControlsEnabled: false,
+                        zoomGesturesEnabled: true,
+                        // hacemos que pinte el marker , pero solo su valor
+                        markers: Set<Marker>.of(_.markers.values),
                       ),
                       Padding(
                         padding: EdgeInsets.only(
@@ -73,17 +78,22 @@ class HomeDriver extends StatelessWidget {
                                 ),
                               ],
                             ),
+                            Button(
+                              texto: 'Conectarse',
+                              color: Theme.of(context).primaryColor,
+                              funcion: () {},
+                            ),
                           ],
                         ),
                       ),
                     ],
-                  );
-                },
+                  ),
+                ),
               ),
-            ),
-          ],
-        ),
-      ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
