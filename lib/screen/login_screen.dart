@@ -106,14 +106,6 @@ class Login extends StatelessWidget {
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  Container(
-                                    alignment: Alignment.centerRight,
-                                    child: Text(
-                                      'Olvido su contraseña ?',
-                                      style:
-                                          Theme.of(context).textTheme.bodyText2,
-                                    ),
-                                  ),
                                 ],
                               ),
                             ),

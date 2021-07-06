@@ -19,6 +19,11 @@ class DriverController extends GetxController {
     }
   }
 
+  // leemos los datos en tiempo real
+  Stream<DocumentSnapshot> getByIdstream(String id) {
+    return _reference.doc(id).snapshots(includeMetadataChanges: true);
+  }
+
   Future<Driver> getById(String id) async {
     DocumentSnapshot documentSnapshot = await _reference.doc(id).get();
 

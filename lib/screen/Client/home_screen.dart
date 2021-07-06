@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:speed/components/button.dart';
 import 'package:speed/components/contenedor.dart';
-import 'package:speed/components/sidebar.dart';
+import 'package:speed/components/sidebarClient.dart';
 import 'package:speed/controllers/Client/clientMap_controller.dart';
 import 'package:speed/controllers/sidebar_controller.dart';
 import 'package:speed/theme/themeChange.dart';
@@ -20,11 +20,10 @@ class Home extends StatelessWidget {
         _.setMapStyle();
         TemaProvider().barState();
         return Scaffold(
-          key: _.key,
           backgroundColor: Theme.of(context).backgroundColor,
           body: Stack(
             children: [
-              Sidebar(),
+              SidebarClient(),
               GetBuilder<SidebarController>(
                 init: SidebarController(),
                 builder: (_menu) => ContenedorAnimado(
@@ -34,11 +33,14 @@ class Home extends StatelessWidget {
                   child: Stack(
                     children: [
                       GoogleMap(
-                        mapType: MapType.normal,
                         initialCameraPosition: _.initialPosition,
                         onMapCreated: _.onMapCreate,
-                        myLocationEnabled: true,
+                        myLocationEnabled: false,
                         myLocationButtonEnabled: false,
+                        zoomControlsEnabled: false,
+                        zoomGesturesEnabled: true,
+                        // hacemos que pinte el marker , pero solo su valor
+                        markers: Set<Marker>.of(_.markers.values),
                       ),
                       Padding(
                         padding: EdgeInsets.only(
@@ -76,7 +78,7 @@ class Home extends StatelessWidget {
                               ],
                             ),
                             Button(
-                              texto: 'Solicitar Viaje',
+                              texto: 'Solicitar',
                               color: Theme.of(context).primaryColor,
                               funcion: () {},
                             ),
@@ -87,6 +89,14 @@ class Home extends StatelessWidget {
                   ),
                 ),
               ),
+              Align(
+                alignment: Alignment.center,
+                child: Image.asset(
+                  'assets/images/pinUsuario.png',
+                  width: 50,
+                  height: 50,
+                ),
+              )
             ],
           ),
         );

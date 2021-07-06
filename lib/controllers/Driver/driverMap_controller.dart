@@ -1,21 +1,45 @@
 import 'dart:async';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:speed/Models/driver.dart';
+import 'package:speed/controllers/Driver/driver_controller.dart';
+import 'package:speed/controllers/Providers/geoFlutter_controller.dart';
 import 'package:speed/theme/themeChange.dart';
 import 'package:speed/utils/snackBar.dart';
 
 class DriverMapController extends GetxController {
-  @override
+  StreamSubscription<DocumentSnapshot> _statusSubcription;
+  StreamSubscription<DocumentSnapshot> _driverInfoSubcription;
+
+  /* @override
   void onInit() async {
     super.onInit();
     loadStyle();
-    markerDriver = await createMarkerImage('assets/images/pinDriver.png');
+    markerDriver = await createMarkerImage('assets/images/pinAuto.png');
     checkGPS();
+  } */
+
+  @override
+  void onReady() async {
+    super.onReady();
+    loadStyle();
+    markerDriver = await createMarkerImage('assets/images/pinAuto.png');
+    checkGPS();
+    getUserInfo();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _streamPosition?.cancel();
+    _statusSubcription?.cancel();
+    _driverInfoSubcription?.cancel();
   }
 
   final formKey = GlobalKey<FormState>();
@@ -32,9 +56,22 @@ class DriverMapController extends GetxController {
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   BitmapDescriptor markerDriver;
 
+  //variables para guardar posicion
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  // variable para guardado de conductor
+  bool isConnect = false;
+
+  //info del usuario
+  Driver driver;
+
+  User getUser() {
+    return _auth.currentUser;
+  }
+
   CameraPosition initialPosition = CameraPosition(
     target: LatLng(-19.0394279, -65.2554989),
-    zoom: 15.0,
+    zoom: 17,
   );
 
   void onMapCreate(GoogleMapController controller) {
@@ -79,10 +116,12 @@ class DriverMapController extends GetxController {
     bool isLocationEnabled = await Geolocator.isLocationServiceEnabled();
     if (isLocationEnabled) {
       updateLocation();
+      checkIfIsConnect();
     } else {
       bool forzeGPS = await Location().requestService();
       if (forzeGPS) {
         updateLocation();
+        checkIfIsConnect();
       } else {
         snackError(
           title: 'Error',
@@ -98,7 +137,8 @@ class DriverMapController extends GetxController {
       await _determinePosition();
       _position = await Geolocator.getLastKnownPosition();
       centrarPosition();
-
+      // Guardado de ubi en firestore
+      saveLocation();
       addMarker(
         'driver',
         _position.latitude,
@@ -123,6 +163,8 @@ class DriverMapController extends GetxController {
           markerDriver,
         );
         animatePosition(_position.latitude, _position.longitude);
+        // Guardado de ubi en firestore
+        saveLocation();
         update();
       });
     } catch (e) {
@@ -147,7 +189,7 @@ class DriverMapController extends GetxController {
       controller.animateCamera(
         CameraUpdate.newCameraPosition(
           CameraPosition(
-            bearing: 0,
+            // bearing: 0,
             target: LatLng(lat, log),
             zoom: 17,
           ),
@@ -226,8 +268,72 @@ class DriverMapController extends GetxController {
         title: title,
         snippet: content,
       ),
+
+      // configuracion para la animacion del marker
+      draggable: false,
+      zIndex: 2,
+      flat: true,
+      anchor: Offset(0.5, 0.5),
+      rotation: _position.heading,
     );
 
     markers[id] = marker;
+  }
+
+  /* ---------------------------
+   Seccion de guardado de ubicacion en Firestore
+  ----------------------------- */
+
+  void saveLocation() async {
+    await Geoflutter()
+        .create(getUser().uid, _position.latitude, _position.longitude);
+  }
+
+  void connect(context) {
+    if (isConnect) {
+      disconnect();
+      // isConnect = false;
+    } else {
+      updateLocation();
+      // isConnect = true;
+    }
+  }
+
+  void disconnect() {
+    // usamos el escuchador de posicion y ponemos el signo de pregunta
+    // para que no venga nulo
+    _streamPosition?.cancel();
+    Geoflutter().delete(getUser().uid);
+  }
+
+  void checkIfIsConnect() {
+    Stream<DocumentSnapshot> status =
+        Geoflutter().getLocationById(getUser().uid);
+    _statusSubcription = status.listen(
+      (DocumentSnapshot document) {
+        if (document.exists) {
+          isConnect = true;
+        } else {
+          isConnect = false;
+        }
+        update();
+      },
+    );
+  }
+
+  /* -----------------
+  Seccion de info de usuario
+  ----------------- */
+  void getUserInfo() {
+    Stream<DocumentSnapshot> driverStream =
+        DriverController().getByIdstream(getUser().uid);
+    _driverInfoSubcription = driverStream.listen(
+      (DocumentSnapshot document) {
+        driver = Driver.fromJson(
+          document.data(),
+        );
+        update();
+      },
+    );
   }
 }

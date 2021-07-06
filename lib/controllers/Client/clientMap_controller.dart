@@ -1,46 +1,87 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:speed/Models/client.dart';
+import 'package:speed/Models/driver.dart';
+import 'package:speed/controllers/Client/cliente_controller.dart';
+import 'package:speed/controllers/Providers/geoFlutter_controller.dart';
 import 'package:speed/theme/themeChange.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:speed/utils/snackBar.dart';
 
 class ClientMapController extends GetxController {
-  @override
-  void onInit() {
+  // StreamSubscription<DocumentSnapshot> _statusSubcription;
+  StreamSubscription<DocumentSnapshot> _clientInfoSubcription;
+
+  /* @override
+  void onInit() async {
     super.onInit();
-    _loadMapStyles();
+    loadStyle();
+    markerDriver = await createMarkerImage('assets/images/pinAuto.png');
     checkGPS();
+  } */
+
+  @override
+  void onReady() async {
+    super.onReady();
+    loadStyle();
+    markerDriver = await createMarkerImage('assets/images/pinAutos.png');
+    checkGPS();
+    getUserInfo();
   }
 
-  final key = GlobalKey<ScaffoldState>();
+  @override
+  void dispose() {
+    super.dispose();
+    // _streamPosition?.cancel();
+    // _statusSubcription?.cancel();
+    _clientInfoSubcription?.cancel();
+  }
+
+  final formKey = GlobalKey<FormState>();
   Completer<GoogleMapController> _mapController = Completer();
   String _darkMap;
   String _lightMap;
 
-  // variables para el map TR
+  // variables para TR
   Position _position;
-  StreamSubscription<Position> _positionStream;
+  // StreamSubscription<Position> _streamPosition;
 
-  // posicion inicial de la camara
+  // Variables para marcadores
+  // lista de marcadores
+  Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
+  BitmapDescriptor markerDriver;
+
+  //variables para guardar posicion
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  // variable para guardado de conductor
+  bool isConnect = false;
+
+  //info del usuario
+  Driver driver;
+  Client client;
+
+  User getUser() {
+    return _auth.currentUser;
+  }
+
   CameraPosition initialPosition = CameraPosition(
     target: LatLng(-19.0394279, -65.2554989),
-    zoom: 15.0,
+    zoom: 17,
   );
 
-  // creacion del mapa resibiendo estilo en base a isDark
   void onMapCreate(GoogleMapController controller) {
     _mapController.complete(controller);
     setMapStyle();
-    /* controller.setMapStyle(
-        TemaProvider().isDark ? TypeMap().mapDark() : TypeMap().mapLight()); */
   }
 
-  //manda al punto inicial de la ubicacion
   Future volver() async {
     final controller = await _mapController.future;
     if (_position != null) {
@@ -56,72 +97,77 @@ class ClientMapController extends GetxController {
     }
   }
 
-  // cargamos el json de estilo para luego ponerlo en el setMapStyle
-  Future _loadMapStyles() async {
+  Future loadStyle() async {
     _darkMap = await rootBundle.loadString('assets/map_styles/dark.json');
     _lightMap = await rootBundle.loadString('assets/map_styles/light.json');
   }
 
   Future setMapStyle() async {
-    // preguntamos si esta en dark pra cargar los estilos
     final controller = await _mapController.future;
-    if (TemaProvider().isDark)
+    if (TemaProvider().isDark) {
       controller.setMapStyle(_darkMap);
-    else
+    } else {
       controller.setMapStyle(_lightMap);
+    }
   }
 
-  /* ************************************
-   Seccion de Mapa para ubicacion en TR 
-   *********************************** */
+  /* --------------------
+    Seccion de Mapa TR
+  ---------------------- */
 
-// actualizamos la ubicacion recibiendo la funcion de ubi en TR
+  void checkGPS() async {
+    bool isLocationEnabled = await Geolocator.isLocationServiceEnabled();
+    if (isLocationEnabled) {
+      updateLocation();
+    } else {
+      bool forzeGPS = await Location().requestService();
+      if (forzeGPS) {
+        updateLocation();
+      } else {
+        snackError(
+          title: 'Error',
+          msg: 'Debe hablitar el GPS para usar los servicios',
+        );
+      }
+    }
+  }
+
   void updateLocation() async {
     try {
+      // accedemos a la localizacion del telefono
       await _determinePosition();
-      // con esto obtendremos la ultima posicion en la que estuvimos ubicados
+      // solo una vez
       _position = await Geolocator.getLastKnownPosition();
       centrarPosition();
-      _positionStream = Geolocator.getPositionStream(
-        // con esto tendra el mejor reconocimiento del GPS
-        // desiredAccuracy: LocationAccuracy.high,
-        distanceFilter: 1,
-        //logica para actualizar la ubi en TR, esto se ejecutara constantemente
-      ).listen((Position position) {
-        _position = position;
-        animateCameraPosition(_position.latitude, _position.longitude);
-      });
+      nearbyDriver();
     } catch (e) {
-      print('error en la localizacion : $e');
+      print('Error en la localizacion : $e');
     }
   }
 
   void centrarPosition() {
-    // preguntamos si recibimos la posicion
     if (_position != null) {
-      // se animara la camara cada vez que se mueva el taxi,
-      // centrandola cada vez que tenga la ultima posicion
-      animateCameraPosition(_position.latitude, _position.longitude);
+      animatePosition(_position.latitude, _position.longitude);
     } else {
-      snackError(title: 'Error', msg: 'Activa el GPS para obtener la posicion');
+      snackError(
+        title: 'Error',
+        msg: 'Activa el GPS para obtener su ubicación',
+      );
     }
   }
 
-  // Validamos
-  void checkGPS() async {
-    // con esto sabremos si el gps esta activado para luego mandar la ubi en TR
-    bool isLocationEnable = await Geolocator.isLocationServiceEnabled();
-    if (isLocationEnable) {
-      print('GPS activado');
-      updateLocation();
-    } else {
-      print('GPS desactivado');
-      // con esto le decimos al usuario que debe activar el GPS
-      bool locationGPS = await Location().requestService();
-      if (locationGPS) {
-        updateLocation();
-        print('El user activo el GPS');
-      }
+  Future animatePosition(double lat, double log) async {
+    final controller = await _mapController.future;
+    if (_position != null) {
+      controller.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            // bearing: 0,
+            target: LatLng(lat, log),
+            zoom: 17,
+          ),
+        ),
+      );
     }
   }
 
@@ -163,18 +209,98 @@ class ClientMapController extends GetxController {
     return await Geolocator.getCurrentPosition();
   }
 
-  Future animateCameraPosition(double latitude, double longitude) async {
-    GoogleMapController controller = await _mapController.future;
-    if (_position != null) {
-      controller.animateCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(
-            bearing: 0,
-            target: LatLng(latitude, longitude),
-            zoom: 17,
-          ),
-        ),
-      );
-    }
+  /* ----------------------
+  Seccion de Custom Marker
+  ----------------------- */
+
+  // metodo para crear un marker recibira la ruta de la imagen
+  Future<BitmapDescriptor> createMarkerImage(String path) async {
+    // creamos una configuracion de imagen para pasarlo al bitmap
+    ImageConfiguration configuration = ImageConfiguration();
+    BitmapDescriptor bitmapDescriptor =
+        await BitmapDescriptor.fromAssetImage(configuration, path);
+    return bitmapDescriptor;
+  }
+
+  // funcion para añadir marcador
+  void addMarker(
+    String markerId,
+    double lat,
+    double log,
+    String title,
+    String content,
+    BitmapDescriptor icon,
+  ) {
+    // una ves creado un marquer hacemos que se añada a la lista
+    MarkerId id = MarkerId(markerId);
+    Marker marker = Marker(
+      markerId: id,
+      icon: icon,
+      position: LatLng(lat, log),
+      infoWindow: InfoWindow(
+        title: title,
+        snippet: content,
+      ),
+
+      /* // configuracion para la animacion del marker
+      draggable: false,
+      zIndex: 2,
+      flat: true,
+      anchor: Offset(0.5, 0.5),
+      rotation: _position.heading, */
+    );
+
+    markers[id] = marker;
+  }
+
+  /* -----------------
+  Seccion de info de usuario
+  ----------------- */
+  void getUserInfo() {
+    Stream<DocumentSnapshot> clientStream =
+        ClientController().getByIdstream(getUser().uid);
+    _clientInfoSubcription = clientStream.listen(
+      (DocumentSnapshot document) {
+        client = Client.fromJson(
+          document.data(),
+        );
+        update();
+      },
+    );
+  }
+
+  /* --------------------
+  Seccion de mostrar conductores cercanos
+  ---------------------- */
+  // le mandamos la ultima posicion y el radio de busqueda de drivers
+  void nearbyDriver() {
+    Stream<List<DocumentSnapshot>> stream = Geoflutter()
+        .getNearbyDriver(_position.latitude, _position.longitude, 2);
+    stream.listen((List<DocumentSnapshot> documentList) {
+      for (MarkerId m in markers.keys) {
+        bool remove = true;
+        for (DocumentSnapshot d in documentList) {
+          if (m.value == d.id) {
+            remove = false;
+          }
+        }
+        if (remove) {
+          markers.remove(m);
+          update();
+        }
+      }
+      for (DocumentSnapshot d in documentList) {
+        GeoPoint point = d.data()['position']['geopoint'];
+        addMarker(
+          d.id,
+          point.latitude,
+          point.longitude,
+          'Conductor Disponible',
+          '',
+          markerDriver,
+        );
+      }
+      update();
+    });
   }
 }

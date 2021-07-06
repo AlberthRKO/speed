@@ -3,12 +3,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:speed/components/avatar.dart';
 import 'package:speed/components/menuOption.dart';
-import 'package:speed/controllers/Driver/driverMap_controller.dart';
+import 'package:speed/controllers/Client/clientMap_controller.dart';
 import 'package:speed/controllers/sidebar_controller.dart';
 import 'package:speed/theme/themeChange.dart';
 
-class Sidebar extends StatelessWidget {
-  const Sidebar({
+class SidebarClient extends StatelessWidget {
+  const SidebarClient({
     Key key,
     this.child,
   }) : super(key: key);
@@ -47,8 +47,8 @@ class Sidebar extends StatelessWidget {
                 child: Image.asset('assets/images/yo.jpg'),
               ), */
                 //opcion para imagenes SVG y jpg
-                GetBuilder<DriverMapController>(
-                  init: DriverMapController(),
+                GetBuilder<ClientMapController>(
+                  init: ClientMapController(),
                   builder: (_info) => Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -62,14 +62,14 @@ class Sidebar extends StatelessWidget {
                         height: 10,
                       ),
                       Text(
-                        _info.driver?.username ?? 'Nombre de Usuario',
+                        _info.client?.username ?? 'Nombre de usuario',
                         style: Theme.of(context).textTheme.headline5,
                       ),
                       SizedBox(
                         height: 3,
                       ),
                       Text(
-                        _info.driver?.email ?? 'Correo electrónico',
+                        _info.client?.email ?? 'Correo electrónico',
                         style: TextStyle(
                           fontSize: 12,
                           fontStyle: FontStyle.italic,

@@ -21,6 +21,10 @@ class ClientController extends GetxController {
     }
   }
 
+  Stream<DocumentSnapshot> getByIdstream(String id) {
+    return _reference.doc(id).snapshots(includeMetadataChanges: true);
+  }
+
   // esta funcion nos devolvera el modelo client cuando le pasemos su id
   Future<Client> getById(String id) async {
     // esto hace una consulta a la DB que nos trae el client

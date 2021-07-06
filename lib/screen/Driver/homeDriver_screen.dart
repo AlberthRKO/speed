@@ -33,7 +33,6 @@ class HomeDriver extends StatelessWidget {
                   child: Stack(
                     children: [
                       GoogleMap(
-                        mapType: MapType.normal,
                         initialCameraPosition: _.initialPosition,
                         onMapCreated: _.onMapCreate,
                         myLocationEnabled: false,
@@ -79,9 +78,14 @@ class HomeDriver extends StatelessWidget {
                               ],
                             ),
                             Button(
-                              texto: 'Conectarse',
-                              color: Theme.of(context).primaryColor,
-                              funcion: () {},
+                              texto:
+                                  _.isConnect ? 'Desconectarse' : 'Conectarse',
+                              color: _.isConnect
+                                  ? Colors.grey[200]
+                                  : Theme.of(context).primaryColor,
+                              funcion: () {
+                                _.connect(context);
+                              },
                             ),
                           ],
                         ),
