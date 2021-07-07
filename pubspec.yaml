@@ -30,12 +30,15 @@ dependencies:
   # firebase_messaging: ^10.0.0
   progress_dialog: ^1.2.4
   google_maps_flutter: ^2.0.6
+  flutter_google_places: ^0.2.6
   # geolocator: ^7.0.3
   geolocator: ^6.1.13
   # location: ^4.2.1
   location: ^3.1.0
   # enviar posicion del taxi en TR y ubicacion de puntos a rango especifico
   geoflutterfire: ^2.2.2
+  geocoder: ^0.2.1
+  geocoding: ^1.0.5
 
 dev_dependencies:
   flutter_test:

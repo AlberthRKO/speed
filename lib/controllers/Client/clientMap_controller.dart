@@ -4,16 +4,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
+import 'package:location/location.dart' as location;
 import 'package:speed/Models/client.dart';
 import 'package:speed/Models/driver.dart';
+import 'package:speed/api/environment.dart';
 import 'package:speed/controllers/Client/cliente_controller.dart';
 import 'package:speed/controllers/Providers/geoFlutter_controller.dart';
+import 'package:speed/screen/Client/clientTravelInfo_screen.dart';
 import 'package:speed/theme/themeChange.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:speed/utils/snackBar.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:google_maps_webservice/places.dart' as places;
 
 class ClientMapController extends GetxController {
   // StreamSubscription<DocumentSnapshot> _statusSubcription;
@@ -68,6 +74,17 @@ class ClientMapController extends GetxController {
   Driver driver;
   Client client;
 
+  // Variables de places
+  String from;
+  LatLng fromLatLng;
+  String to;
+  LatLng toLatLng;
+  bool isFromSelect = true;
+  bool isToSelect = true;
+
+  places.GoogleMapsPlaces _places =
+      places.GoogleMapsPlaces(apiKey: Environment.API_KEY_MAPS);
+
   User getUser() {
     return _auth.currentUser;
   }
@@ -120,7 +137,7 @@ class ClientMapController extends GetxController {
     if (isLocationEnabled) {
       updateLocation();
     } else {
-      bool forzeGPS = await Location().requestService();
+      bool forzeGPS = await location.Location().requestService();
       if (forzeGPS) {
         updateLocation();
       } else {
@@ -164,7 +181,7 @@ class ClientMapController extends GetxController {
           CameraPosition(
             // bearing: 0,
             target: LatLng(lat, log),
-            zoom: 17,
+            zoom: 15,
           ),
         ),
       );
@@ -302,5 +319,97 @@ class ClientMapController extends GetxController {
       }
       update();
     });
+  }
+
+  /* --------------------
+  Seccion de Google Places
+  ---------------------- */
+/* --------------------
+  Seccion de Google Places
+  ---------------------- */
+
+  void changeFromTo() {
+    isFromSelect = !isFromSelect;
+    if (isFromSelect) isToSelect = true;
+    update();
+  }
+
+  void changeFromSoli() {
+    isToSelect = !isToSelect;
+    update();
+  }
+
+  Future<Null> setLocationScrollInfo() async {
+    double lat = initialPosition.target.latitude;
+    double lng = initialPosition.target.longitude;
+    if (initialPosition != null) {
+      List<Placemark> address = await placemarkFromCoordinates(lat, lng);
+      // preguntamos si devolvio una direccion
+      if (address != null) {
+        if (address.length > 0) {
+          String direcctions = address[0].thoroughfare;
+          String street = address[0].subThoroughfare;
+          String city = address[0].locality;
+          String department = address[0].administrativeArea;
+
+          if (isFromSelect) {
+            from = '$direcctions #$street, $city, $department';
+            fromLatLng = new LatLng(lat, lng);
+          } else {
+            to = '$direcctions #$street, $city, $department';
+            toLatLng = new LatLng(lat, lng);
+          }
+
+          update();
+        }
+      }
+    }
+  }
+
+  // Seccion de autocompletado
+  Future<Null> showGoogleAutocomplete(bool isfrom, BuildContext context) async {
+    places.Prediction p = await PlacesAutocomplete.show(
+      context: context,
+      apiKey: Environment.API_KEY_MAPS,
+      language: 'es',
+      strictbounds: true,
+      radius: 10000,
+      location: places.Location(-19.0205659, -65.2948974),
+    );
+
+    if (p != null) {
+      places.PlacesDetailsResponse detail =
+          await _places.getDetailsByPlaceId(p.placeId, language: 'es');
+      double lat = detail.result.geometry.location.lat;
+      double lng = detail.result.geometry.location.lng;
+      List<Address> address =
+          await Geocoder.local.findAddressesFromQuery(p.description);
+      if (address != null) {
+        if (address.length > 0) {
+          if (detail != null) {
+            String direcction = detail.result.name;
+            String city = address[0].locality;
+            String department = address[0].adminArea;
+
+            if (isfrom) {
+              from = '$direcction, $city, $department';
+              fromLatLng = new LatLng(lat, lng);
+            } else {
+              to = '$direcction, $city, $department';
+              toLatLng = new LatLng(lat, lng);
+            }
+
+            update();
+          }
+        }
+      }
+    }
+  }
+
+  void goInfotravel() {
+    Get.to(
+      () => ClienteTravelInfo(),
+      transition: Transition.downToUp,
+    );
   }
 }

@@ -35,6 +35,7 @@ class HomeDriver extends StatelessWidget {
                       GoogleMap(
                         initialCameraPosition: _.initialPosition,
                         onMapCreated: _.onMapCreate,
+                        mapType: MapType.normal,
                         myLocationEnabled: false,
                         myLocationButtonEnabled: false,
                         zoomControlsEnabled: false,

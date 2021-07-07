@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -35,12 +37,20 @@ class Home extends StatelessWidget {
                       GoogleMap(
                         initialCameraPosition: _.initialPosition,
                         onMapCreated: _.onMapCreate,
+                        mapType: MapType.normal,
                         myLocationEnabled: false,
                         myLocationButtonEnabled: false,
                         zoomControlsEnabled: false,
                         zoomGesturesEnabled: true,
                         // hacemos que pinte el marker , pero solo su valor
                         markers: Set<Marker>.of(_.markers.values),
+                        onCameraMove: (position) {
+                          _.initialPosition = position;
+                          print('On Camera Move: $position');
+                        },
+                        onCameraIdle: () async {
+                          await _.setLocationScrollInfo();
+                        },
                       ),
                       Padding(
                         padding: EdgeInsets.only(
@@ -50,7 +60,6 @@ class Home extends StatelessWidget {
                           bottom: 25,
                         ),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -77,30 +86,194 @@ class Home extends StatelessWidget {
                                 ),
                               ],
                             ),
+                            cardPlaces(
+                                context,
+                                _.from,
+                                _.to,
+                                _.isFromSelect,
+                                _.isToSelect,
+                                _.changeFromTo,
+                                _.changeFromSoli,
+                                _),
+                            Expanded(child: Container()),
                             Button(
                               texto: 'Solicitar',
                               color: Theme.of(context).primaryColor,
-                              funcion: () {},
+                              funcion: _.goInfotravel,
                             ),
                           ],
                         ),
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Image.asset(
+                          'assets/images/pinUsuario.png',
+                          width: 50,
+                          height: 50,
+                        ),
+                      ),
+                      Column(
+                        children: [
+                          SizedBox(
+                            height: 40,
+                          ),
+                          // cardPlaces(context),
+                        ],
                       ),
                     ],
                   ),
                 ),
               ),
-              Align(
-                alignment: Alignment.center,
-                child: Image.asset(
-                  'assets/images/pinUsuario.png',
-                  width: 50,
-                  height: 50,
-                ),
-              )
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget cardPlaces(
+      context,
+      String from,
+      String to,
+      bool isChange,
+      bool toChange,
+      Function cambio,
+      Function confirm,
+      ClientMapController client) {
+    return BoxForm2(
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Icon(
+                FontAwesomeIcons.mapPin,
+                size: 18,
+                color: Theme.of(context).hintColor,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () async {
+                    await client.showGoogleAutocomplete(true, context);
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Desde',
+                        style: TextStyle(fontSize: 8, color: Colors.grey),
+                      ),
+                      Text(
+                        from ?? 'Origen',
+                        style: Theme.of(context).textTheme.subtitle2,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              GestureDetector(
+                onTap: cambio,
+                child: Icon(
+                  isChange
+                      ? FontAwesomeIcons.checkCircle
+                      : FontAwesomeIcons.solidCheckCircle,
+                  size: 18,
+                  color: isChange ? Theme.of(context).hintColor : Colors.green,
+                ),
+              ),
+            ],
+          ),
+          Divider(
+            color: Colors.grey[600],
+          ),
+          Row(
+            children: [
+              Icon(
+                FontAwesomeIcons.mapPin,
+                size: 18,
+                color: Theme.of(context).hintColor,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () async {
+                    await client.showGoogleAutocomplete(false, context);
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Hasta',
+                        style: TextStyle(fontSize: 8, color: Colors.grey),
+                      ),
+                      Text(
+                        to ?? 'Destino',
+                        style: Theme.of(context).textTheme.subtitle2,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              GestureDetector(
+                onTap: confirm,
+                child: Icon(
+                  toChange
+                      ? FontAwesomeIcons.checkCircle
+                      : FontAwesomeIcons.solidCheckCircle,
+                  size: 18,
+                  color: toChange ? Theme.of(context).hintColor : Colors.green,
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class BoxForm2 extends StatelessWidget {
+  const BoxForm2({
+    Key key,
+    @required this.child,
+  }) : super(key: key);
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Container(
+        alignment: Alignment.center,
+        width: size.width > 450 ? 400 : double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: Theme.of(context).cardColor,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              offset: Offset(-4, 6),
+              blurRadius: 4,
+            )
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          child: child,
+        ),
+      ),
     );
   }
 }
