@@ -30,6 +30,7 @@ class TemaProvider extends GetxController {
       primaryColor: Color(0XFFE7D42F),
       accentColor: Color(0XFF3B4661),
       backgroundColor: Color(0xFFF8F7FC),
+      splashColor: Color(0XFF3B4661),
       hintColor: Color(0XFF3B4661),
       cardColor: Colors.white,
       textTheme: TextTheme(
@@ -108,6 +109,7 @@ class TemaProvider extends GetxController {
       primaryColor: Color(0XFFE7D42F),
       accentColor: Color(0XFF3B4661),
       backgroundColor: Color(0xFF252737),
+      splashColor: Color(0XFFE7D42F),
       hintColor: Colors.white,
       cardColor: Color(0XFF2D2F3F),
       textTheme: TextTheme(

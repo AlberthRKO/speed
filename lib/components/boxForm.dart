@@ -13,14 +13,14 @@ class Boxform extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       child: Container(
         alignment: Alignment.center,
         width: double.infinity,
         height: size.height * tamanBox,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           boxShadow: [
             BoxShadow(
               color: Colors.black12,
@@ -30,7 +30,7 @@ class Boxform extends StatelessWidget {
           ],
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
           child: child,
         ),
       ),
@@ -55,7 +55,7 @@ class BoxForm2 extends StatelessWidget {
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           boxShadow: [
             BoxShadow(
               color: Colors.black12,

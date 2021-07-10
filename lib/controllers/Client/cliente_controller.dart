@@ -8,6 +8,7 @@ class ClientController extends GetxController {
 
   // Esto crea una coleccion en la DB recibiendo
   //como dato el Client model que luego lo pasamos a Json
+  // ignore: missing_return
   Future<void> create(Client client) {
     String errorMsg;
     try {

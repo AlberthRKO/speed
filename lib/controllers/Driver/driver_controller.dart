@@ -6,6 +6,7 @@ class DriverController extends GetxController {
   final CollectionReference _reference =
       FirebaseFirestore.instance.collection('Drivers');
 
+  // ignore: missing_return
   Future<void> create(Driver driver) {
     String errorMsg;
     try {

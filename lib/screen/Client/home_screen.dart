@@ -99,7 +99,9 @@ class Home extends StatelessWidget {
                             Button(
                               texto: 'Solicitar',
                               color: Theme.of(context).primaryColor,
-                              funcion: _.goInfotravel,
+                              funcion: () {
+                                _.goInfotravel(context);
+                              },
                             ),
                           ],
                         ),

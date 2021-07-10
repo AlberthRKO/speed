@@ -340,29 +340,33 @@ class ClientMapController extends GetxController {
   }
 
   Future<Null> setLocationScrollInfo() async {
-    double lat = initialPosition.target.latitude;
-    double lng = initialPosition.target.longitude;
-    if (initialPosition != null) {
-      List<Placemark> address = await placemarkFromCoordinates(lat, lng);
-      // preguntamos si devolvio una direccion
-      if (address != null) {
-        if (address.length > 0) {
-          String direcctions = address[0].thoroughfare;
-          String street = address[0].subThoroughfare;
-          String city = address[0].locality;
-          String department = address[0].administrativeArea;
+    try {
+      if (initialPosition != null) {
+        double lat = initialPosition.target.latitude;
+        double lng = initialPosition.target.longitude;
+        List<Placemark> address = await placemarkFromCoordinates(lat, lng);
+        // preguntamos si devolvio una direccion
+        if (address != null) {
+          if (address.length > 0) {
+            String direcctions = address[0].thoroughfare;
+            String street = address[0].subThoroughfare;
+            String city = address[0].locality;
+            // String department = address[0].administrativeArea;
 
-          if (isFromSelect) {
-            from = '$direcctions #$street, $city, $department';
-            fromLatLng = new LatLng(lat, lng);
-          } else {
-            to = '$direcctions #$street, $city, $department';
-            toLatLng = new LatLng(lat, lng);
+            if (isFromSelect) {
+              from = '$direcctions #$street, $city';
+              fromLatLng = new LatLng(lat, lng);
+            } else {
+              to = '$direcctions #$street, $city';
+              toLatLng = new LatLng(lat, lng);
+            }
+
+            update();
           }
-
-          update();
         }
       }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -389,13 +393,13 @@ class ClientMapController extends GetxController {
           if (detail != null) {
             String direcction = detail.result.name;
             String city = address[0].locality;
-            String department = address[0].adminArea;
+            // String department = address[0].adminArea;
 
             if (isfrom) {
-              from = '$direcction, $city, $department';
+              from = '$direcction, $city';
               fromLatLng = new LatLng(lat, lng);
             } else {
-              to = '$direcction, $city, $department';
+              to = '$direcction, $city';
               toLatLng = new LatLng(lat, lng);
             }
 
@@ -406,10 +410,27 @@ class ClientMapController extends GetxController {
     }
   }
 
-  void goInfotravel() {
-    Get.to(
-      () => ClienteTravelInfo(),
-      transition: Transition.downToUp,
-    );
+  void goInfotravel(context) {
+    if (fromLatLng != null && toLatLng != null) {
+      Get.to(
+        () => ClienteTravelInfo(),
+        transition: Transition.downToUp,
+        arguments: {
+          'from': from,
+          'to': to,
+          'fromLatLng': fromLatLng,
+          'toLatLng': toLatLng,
+        },
+      );
+    } else {
+      Get.snackbar(
+        'Error', //titulo
+        'Debe seleccionar el otrigen y el destino',
+        backgroundColor: Theme.of(context).cardColor,
+        snackPosition: SnackPosition.BOTTOM,
+        // icon: Icon(FontAwesomeIcons.solidLaughWink),
+        colorText: Theme.of(context).hintColor,
+      );
+    }
   }
 }
