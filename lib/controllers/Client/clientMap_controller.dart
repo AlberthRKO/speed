@@ -24,6 +24,8 @@ import 'package:google_maps_webservice/places.dart' as places;
 class ClientMapController extends GetxController {
   // StreamSubscription<DocumentSnapshot> _statusSubcription;
   StreamSubscription<DocumentSnapshot> _clientInfoSubcription;
+  StreamSubscription<List<DocumentSnapshot>> _streamDrivers;
+  String nombreDriver;
 
   /* @override
   void onInit() async {
@@ -48,6 +50,7 @@ class ClientMapController extends GetxController {
     // _streamPosition?.cancel();
     // _statusSubcription?.cancel();
     _clientInfoSubcription?.cancel();
+    _streamDrivers?.cancel();
   }
 
   final formKey = GlobalKey<FormState>();
@@ -292,8 +295,8 @@ class ClientMapController extends GetxController {
   // le mandamos la ultima posicion y el radio de busqueda de drivers
   void nearbyDriver() {
     Stream<List<DocumentSnapshot>> stream = Geoflutter()
-        .getNearbyDriver(_position.latitude, _position.longitude, 2);
-    stream.listen((List<DocumentSnapshot> documentList) {
+        .getNearbyDriver(_position.latitude, _position.longitude, 3);
+    _streamDrivers = stream.listen((List<DocumentSnapshot> documentList) {
       for (MarkerId m in markers.keys) {
         bool remove = true;
         for (DocumentSnapshot d in documentList) {
@@ -313,7 +316,7 @@ class ClientMapController extends GetxController {
           point.latitude,
           point.longitude,
           'Conductor Disponible',
-          '',
+          d.id,
           markerDriver,
         );
       }

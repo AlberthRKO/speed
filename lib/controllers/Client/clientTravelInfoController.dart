@@ -241,6 +241,12 @@ class ClientTravelInfoController extends GetxController {
     Get.to(
       () => ClientTravelRequest(),
       transition: Transition.downToUp,
+      arguments: {
+        'from': from,
+        'to': to,
+        'fromLatLng': fromLatLng,
+        'toLatLng': toLatLng,
+      },
     );
   }
 }
