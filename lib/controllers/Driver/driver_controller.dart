@@ -35,4 +35,8 @@ class DriverController extends GetxController {
       return null;
     }
   }
+
+  Future<void> actualizar(Map<String, dynamic> data, String id) {
+    return _reference.doc(id).update(data);
+  }
 }

@@ -42,4 +42,9 @@ class ClientController extends GetxController {
       return null;
     }
   }
+
+  // Metodo que nos permitira actualizar informacion en firebase
+  Future<void> actualizar(Map<String, dynamic> data, String id) {
+    return _reference.doc(id).update(data);
+  }
 }

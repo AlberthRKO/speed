@@ -4,22 +4,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_google_places/flutter_google_places.dart';
+// import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as location;
 import 'package:speed/Models/client.dart';
 import 'package:speed/Models/driver.dart';
-import 'package:speed/api/environment.dart';
+// import 'package:speed/api/environment.dart';
 import 'package:speed/controllers/Client/cliente_controller.dart';
 import 'package:speed/controllers/Providers/geoFlutter_controller.dart';
+import 'package:speed/controllers/Providers/pushNotification_provider.dart';
 import 'package:speed/screen/Client/clientTravelInfo_screen.dart';
 import 'package:speed/theme/themeChange.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:speed/utils/snackBar.dart';
-import 'package:geocoder/geocoder.dart';
+// import 'package:geocoder/geocoder.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:google_maps_webservice/places.dart' as places;
+// import 'package:google_maps_webservice/places.dart' as places;
 
 class ClientMapController extends GetxController {
   // StreamSubscription<DocumentSnapshot> _statusSubcription;
@@ -41,6 +42,8 @@ class ClientMapController extends GetxController {
     loadStyle();
     markerDriver = await createMarkerImage('assets/images/pinAutos.png');
     checkGPS();
+    saveToken();
+    // saveAlgo();
     getUserInfo();
   }
 
@@ -85,8 +88,8 @@ class ClientMapController extends GetxController {
   bool isFromSelect = true;
   bool isToSelect = true;
 
-  places.GoogleMapsPlaces _places =
-      places.GoogleMapsPlaces(apiKey: Environment.API_KEY_MAPS);
+  /* places.GoogleMapsPlaces _places =
+      places.GoogleMapsPlaces(apiKey: Environment.API_KEY_MAPS); */
 
   User getUser() {
     return _auth.currentUser;
@@ -294,6 +297,7 @@ class ClientMapController extends GetxController {
   ---------------------- */
   // le mandamos la ultima posicion y el radio de busqueda de drivers
   void nearbyDriver() {
+    print('entrooooooooooo');
     Stream<List<DocumentSnapshot>> stream = Geoflutter()
         .getNearbyDriver(_position.latitude, _position.longitude, 3);
     _streamDrivers = stream.listen((List<DocumentSnapshot> documentList) {
@@ -310,7 +314,10 @@ class ClientMapController extends GetxController {
         }
       }
       for (DocumentSnapshot d in documentList) {
-        GeoPoint point = d.data()['position']['geopoint'];
+        // print('Conductores Encontrados22222: ${d.id}');
+        GeoPoint point = d["position"]["geopoint"];
+        // GeoPoint point = d.data();
+        // print('RESPUESTAAAAAAAA $point');
         addMarker(
           d.id,
           point.latitude,
@@ -374,7 +381,7 @@ class ClientMapController extends GetxController {
   }
 
   // Seccion de autocompletado
-  Future<Null> showGoogleAutocomplete(bool isfrom, BuildContext context) async {
+  /* Future<Null> showGoogleAutocomplete(bool isfrom, BuildContext context) async {
     places.Prediction p = await PlacesAutocomplete.show(
       context: context,
       apiKey: Environment.API_KEY_MAPS,
@@ -411,7 +418,7 @@ class ClientMapController extends GetxController {
         }
       }
     }
-  }
+  } */
 
   void goInfotravel(context) {
     if (fromLatLng != null && toLatLng != null) {
@@ -435,5 +442,17 @@ class ClientMapController extends GetxController {
         colorText: Theme.of(context).hintColor,
       );
     }
+  }
+
+  // Guardar token de usuario
+  void saveToken() {
+    PushNotificationProvider().saveToken(getUser().uid, 'Client');
+  }
+
+  void saveAlgo() {
+    Map<String, dynamic> hola = {
+      'hola': 5,
+    };
+    ClientController().actualizar(hola, getUser().uid);
   }
 }

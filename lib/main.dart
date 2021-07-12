@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:speed/controllers/Providers/pushNotification_provider.dart';
 import 'package:speed/screen/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:speed/theme/themeChange.dart';
@@ -11,10 +12,24 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
   await Firebase.initializeApp();
+  // await PushNotificationProvider.verToken();
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    PushNotificationProvider pushNotificationProvider =
+        new PushNotificationProvider();
+    pushNotificationProvider.initPushNotificaction();
+  }
+
   @override
   Widget build(BuildContext context) {
     TemaProvider().barState();

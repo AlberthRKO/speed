@@ -46,7 +46,7 @@ class Home extends StatelessWidget {
                         markers: Set<Marker>.of(_.markers.values),
                         onCameraMove: (position) {
                           _.initialPosition = position;
-                          print('On Camera Move: $position');
+                          // print('On Camera Move: $position');
                         },
                         onCameraIdle: () async {
                           await _.setLocationScrollInfo();
@@ -158,7 +158,7 @@ class Home extends StatelessWidget {
               Expanded(
                 child: GestureDetector(
                   onTap: () async {
-                    await client.showGoogleAutocomplete(true, context);
+                    // await client.showGoogleAutocomplete(true, context);
                   },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -206,7 +206,7 @@ class Home extends StatelessWidget {
               Expanded(
                 child: GestureDetector(
                   onTap: () async {
-                    await client.showGoogleAutocomplete(false, context);
+                    // await client.showGoogleAutocomplete(false, context);
                   },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

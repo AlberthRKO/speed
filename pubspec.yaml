@@ -21,27 +21,33 @@ dependencies:
   get: ^4.1.4
   get_storage: ^2.0.2
   shared_preferences: ^2.0.5
-  # firebase_auth: ^1.2.0
-  firebase_auth: ^0.20.1
-  # cloud_firestore: ^2.2.0
-  cloud_firestore: ^0.16.0
-  # firebase_core: ^1.2.0
-  firebase_core: ^0.7.0
+  firebase_auth: ^1.2.0
+  #firebase_auth: ^0.20.1
+  cloud_firestore: ^2.2.0
+  #cloud_firestore: ^0.16.0
+  firebase_core: ^1.2.0
+  #firebase_core: ^0.7.0
   # firebase_messaging: ^10.0.0
   progress_dialog: ^1.2.4
+  # google_maps_flutter: ^2.0.6
   google_maps_flutter: ^2.0.6
-  flutter_google_places: ^0.2.6
-  # geolocator: ^7.0.3
-  geolocator: ^6.1.13
-  # location: ^4.2.1
-  location: ^3.1.0
+  # flutter_google_places: ^0.2.6
+  # flutter_google_places: ^0.2.7
+  google_place: ^0.4.0
+  geolocator: ^7.0.3
+  # geolocator: ^6.1.13
+  location: ^4.2.1
+  # location: ^3.1.0
   # enviar posicion del taxi en TR y ubicacion de puntos a rango especifico
-  geoflutterfire: ^2.2.2
+  geoflutterfire: ^3.0.1
+  # geocoder: ^0.2.1
+  # geocoding: ^1.0.5
   geocoder: ^0.2.1
-  geocoding: ^1.0.5
-  flutter_polyline_points: ^0.2.4
-  dio: ^3.0.0
+  geocoding: ^2.0.0
+  flutter_polyline_points: ^1.0.0
+  dio: ^4.0.0
   lottie: ^1.1.0
+  firebase_messaging: ^10.0.0
 
 dev_dependencies:
   flutter_test:

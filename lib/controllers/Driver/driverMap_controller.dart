@@ -10,6 +10,7 @@ import 'package:location/location.dart';
 import 'package:speed/Models/driver.dart';
 import 'package:speed/controllers/Driver/driver_controller.dart';
 import 'package:speed/controllers/Providers/geoFlutter_controller.dart';
+import 'package:speed/controllers/Providers/pushNotification_provider.dart';
 import 'package:speed/theme/themeChange.dart';
 import 'package:speed/utils/snackBar.dart';
 
@@ -31,6 +32,7 @@ class DriverMapController extends GetxController {
     loadStyle();
     markerDriver = await createMarkerImage('assets/images/pinAuto.png');
     checkGPS();
+    saveToken();
     getUserInfo();
   }
 
@@ -335,5 +337,10 @@ class DriverMapController extends GetxController {
         update();
       },
     );
+  }
+
+  // Guardar token de usuario
+  void saveToken() {
+    PushNotificationProvider().saveToken(getUser().uid, 'Driver');
   }
 }
