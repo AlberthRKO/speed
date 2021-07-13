@@ -59,9 +59,12 @@ class LoginController extends GetxController {
   }
 
   void isLogin() {
+    String notifi = appData.read('isNotification');
     FirebaseAuth.instance.authStateChanges().listen(
       (User user) {
         if (user != null) {
+          print('validacionnnnnn $notifi');
+          // sii entramos a la notificacion..no hace nada
           print('Usuario logeado');
           if (tipo == 'Client')
             Get.off(() => Home());

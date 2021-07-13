@@ -1,17 +1,27 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:speed/controllers/Client/cliente_controller.dart';
 import 'package:speed/controllers/Driver/driver_controller.dart';
+import 'package:http/http.dart' as http;
 
-class PushNotificationProvider {
+class PushNotificationProvider extends GetxController {
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   // informacion que nos mandara cada vez que reciba una notificacion
-  // ignore: close_sinks
   StreamController _streamController =
       StreamController<Map<String, dynamic>>.broadcast();
 
   static String token;
+
+  // variables de dio
+  var url = Uri.parse('https://fcm.googleapis.com/fcm/send');
+
+  final appData = GetStorage();
+
+  // PushNotificationProvider({Dio dio}) : _dio = dio ?? Dio();
 
   Stream<Map<String, dynamic>> get message => _streamController.stream;
 
@@ -45,6 +55,19 @@ class PushNotificationProvider {
         .listen((IosNotificationSettings settings) {
       print('Las configuraciones para ios fueron registradas $settings');
     }); */
+
+    // ONLAUCH
+    FirebaseMessaging.instance
+        .getInitialMessage()
+        .then((RemoteMessage message) {
+      if (message != null) {
+        Map<String, dynamic> data = message.data;
+        appData.write('isNotification', 'true');
+        String notifi = appData.read('isNotification');
+        print('segundaaaaaaaaa $notifi');
+        _streamController.sink.add(data);
+      }
+    });
 
     // ONMESSAGE
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -86,4 +109,27 @@ class PushNotificationProvider {
     print('TOKENNNNNNNNNNNNNNNNNNNNN: $token');
   } */
 
+  // Metodo para enviar las notificaciones push
+  Future<void> sendMessage(String to, Map<String, dynamic> data) async {
+    await http.post(url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization':
+              'key=AAAAYMb7msI:APA91bHvKvgT89vCpoOHpb9rZEqGBHNu5DdVlHCMh9VyrVfw_zUWd_uAqUh8VSC-S-9JpqCLOLy611I3-bBgLcz3aKzgP5H5YZle5OxnRphep5v0x-tML57LkH_8bphd1pkwrgbhqD0-'
+        },
+        body: jsonEncode(<String, dynamic>{
+          'notification': <String, dynamic>{
+            'body': 'Este es el contenido',
+            'title': 'Este es el titulo',
+          },
+          'priority': 'high',
+          'ttl': '4500s',
+          'data': data,
+          'to': to
+        }));
+  }
+
+  void streamsApagar() {
+    _streamController?.close();
+  }
 }
