@@ -12,6 +12,7 @@ import 'package:location/location.dart' as location;
 import 'package:speed/Models/driver.dart';
 import 'package:speed/Models/travelInfo.dart';
 import 'package:speed/api/environment.dart';
+import 'package:speed/components/bottomSheet.dart';
 import 'package:speed/controllers/Driver/driver_controller.dart';
 import 'package:speed/controllers/Providers/geoFlutter_controller.dart';
 import 'package:speed/controllers/Providers/travelInfo_provider.dart';
@@ -41,6 +42,8 @@ class ClientTravelMapController extends GetxController {
   bool isPickupTravel = false;
   bool isStartTravel = false;
 
+  StreamSubscription<DocumentSnapshot<Object>> streamStatus;
+
   @override
   void onReady() async {
     super.onReady();
@@ -55,6 +58,7 @@ class ClientTravelMapController extends GetxController {
   void dispose() {
     super.dispose();
     _stream?.cancel();
+    streamStatus?.cancel();
   }
 
   //variables para guardar posicion
@@ -202,7 +206,7 @@ class ClientTravelMapController extends GetxController {
   void checkTravelStatus() async {
     Stream<DocumentSnapshot> stream =
         TravelInfoProvider().getByIdStrem(getUser().uid);
-    stream.listen(
+    streamStatus = stream.listen(
       (DocumentSnapshot document) {
         travelInfo = TravelInfo.fromJson(document.data());
         if (travelInfo.status == 'accepted') {
@@ -257,6 +261,7 @@ class ClientTravelMapController extends GetxController {
 
   void getDriverInfo(String id) async {
     driver = await DriverController().getById(id);
+    update();
   }
 
   // obtener la ubi del conductor en tiempo real
@@ -295,6 +300,7 @@ class ClientTravelMapController extends GetxController {
 
   void startTravel() {
     if (!isStartTravel) {
+      isStartTravel = true;
       // Una vez q se acepte el viaje limpiamos el trazado anterior
       polylines = {};
       points = [];
@@ -315,5 +321,20 @@ class ClientTravelMapController extends GetxController {
       setPolylines(from, to);
       update();
     }
+  }
+
+  // abrir informacion del conductor
+  void openBottomSheet(context) {
+    if (driver == null) return;
+    showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      context: context,
+      builder: (context) => BottomSheetClient(
+        nombre: driver?.username,
+        correo: driver?.email,
+        modelo: driver?.modelo,
+        placa: driver?.placa,
+      ),
+    );
   }
 }

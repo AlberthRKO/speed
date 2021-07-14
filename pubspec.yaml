@@ -48,6 +48,8 @@ dependencies:
   dio: ^4.0.0
   lottie: ^1.1.0
   firebase_messaging: ^10.0.0
+  modal_bottom_sheet: ^2.0.0
+  flutter_rating_bar: ^4.0.0
 
 dev_dependencies:
   flutter_test:

@@ -19,6 +19,7 @@ class ClientTravelRequestController extends GetxController {
   String to;
   LatLng fromLatLng;
   LatLng toLatLng;
+  double price;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // variables de conductores cercanos
@@ -44,6 +45,7 @@ class ClientTravelRequestController extends GetxController {
     to = argumentos['to'];
     fromLatLng = argumentos['fromLatLng'];
     toLatLng = argumentos['toLatLng'];
+    price = argumentos['price'];
     createTravelInfo();
     getNearbyDrivers();
   }
@@ -62,6 +64,7 @@ class ClientTravelRequestController extends GetxController {
       toLat: toLatLng.latitude,
       toLng: toLatLng.longitude,
       status: 'created',
+      price: price,
     );
 
     await TravelInfoProvider().create(travelInfo);
@@ -97,6 +100,7 @@ class ClientTravelRequestController extends GetxController {
       'idClient': getUser().uid,
       'origen': from,
       'destino': to,
+      'price': price.toString(),
     };
     print('DATOSSSSSSSS $data');
     PushNotificationProvider().sendMessage(

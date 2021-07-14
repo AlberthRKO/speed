@@ -13,6 +13,7 @@ import 'package:speed/controllers/Providers/googleDirections.dart';
 import 'package:speed/controllers/Providers/prices_provider.dart';
 import 'package:speed/screen/Client/clienteTravelRequest_screen.dart';
 import 'package:speed/theme/themeChange.dart';
+import 'package:speed/utils/snackBar.dart';
 
 class ClientTravelInfoController extends GetxController {
   String from;
@@ -65,6 +66,7 @@ class ClientTravelInfoController extends GetxController {
   String distancia;
   String tiempo;
   // variables para precio
+  double total;
   double minTotal;
   double maxTotal;
 
@@ -229,7 +231,8 @@ class ClientTravelInfoController extends GetxController {
     double kmValue = double.parse(distancia.split(" ")[0]) * prices.km;
     double minvalue = double.parse(tiempo.split(" ")[0]) * prices.min;
 
-    double total = kmValue + minvalue;
+    total = kmValue + minvalue;
+    total = total.toPrecision(2);
     minTotal = total - 0.5;
     maxTotal = total + 0.5;
     maxTotal = maxTotal.toPrecision(2);
@@ -238,15 +241,20 @@ class ClientTravelInfoController extends GetxController {
   }
 
   void goRequestSoli() {
-    Get.to(
-      () => ClientTravelRequest(),
-      transition: Transition.downToUp,
-      arguments: {
-        'from': from,
-        'to': to,
-        'fromLatLng': fromLatLng,
-        'toLatLng': toLatLng,
-      },
-    );
+    if (total != null) {
+      Get.to(
+        () => ClientTravelRequest(),
+        transition: Transition.downToUp,
+        arguments: {
+          'from': from,
+          'to': to,
+          'fromLatLng': fromLatLng,
+          'toLatLng': toLatLng,
+          'price': total,
+        },
+      );
+    } else {
+      snackError(title: 'Datos cargando', msg: 'Espere a que cargue los datos');
+    }
   }
 }

@@ -14,6 +14,7 @@ class DriverTravelRequestController extends GetxController {
   String from;
   String to;
   String idClient;
+  String price;
 
   final appData = GetStorage();
   // bool get isDark2 => appData.read('darkmode');
@@ -33,6 +34,7 @@ class DriverTravelRequestController extends GetxController {
     from = argumentos['origen'];
     to = argumentos['destino'];
     idClient = argumentos['idClient'];
+    price = argumentos['price'];
     print('argumentoooooos $from');
     getClientInfo();
     startTimer();

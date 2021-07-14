@@ -73,6 +73,13 @@ class DriverTravelRequest extends StatelessWidget {
                             FontAwesomeIcons.mapMarkedAlt,
                             () {},
                           ),
+                          infoTravel(
+                            context,
+                            'Precio:',
+                            _.price ?? '',
+                            FontAwesomeIcons.dollarSign,
+                            () {},
+                          ),
                           SizedBox(
                             height: 10,
                           ),

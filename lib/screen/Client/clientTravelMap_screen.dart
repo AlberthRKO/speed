@@ -55,7 +55,9 @@ class ClientTravelMap extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               IconCircle(
-                                function: () {},
+                                function: () {
+                                  _.openBottomSheet(context);
+                                },
                                 icono: FontAwesomeIcons.solidUser,
                               ),
                               _infoTravel(

@@ -8,10 +8,18 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as location;
+import 'package:speed/Models/client.dart';
+import 'package:speed/Models/prices.dart';
+import 'package:speed/Models/travelHistory.dart';
 import 'package:speed/Models/travelInfo.dart';
 import 'package:speed/api/environment.dart';
+import 'package:speed/components/bottomSheetDriver.dart';
+import 'package:speed/controllers/Client/cliente_controller.dart';
 import 'package:speed/controllers/Providers/geoFlutter_controller.dart';
+import 'package:speed/controllers/Providers/prices_provider.dart';
+import 'package:speed/controllers/Providers/travelHistory_provider.dart';
 import 'package:speed/controllers/Providers/travelInfo_provider.dart';
+import 'package:speed/screen/Driver/driverTravelCalificaction_screen.dart';
 import 'package:speed/theme/themeChange.dart';
 import 'package:speed/utils/snackBar.dart';
 
@@ -27,6 +35,13 @@ class DriverTravelMapController extends GetxController {
 
   // variables para la distancia hacia el lugar de recogida
   double distanceBeetween;
+
+  // variables para distancia y tiempo del viaje
+  Timer _timer;
+  int seconds = 0;
+  int minuto = 0;
+  double metros = 0;
+  double km = 0;
 
   @override
   void onInit() {
@@ -52,6 +67,7 @@ class DriverTravelMapController extends GetxController {
   void dispose() {
     super.dispose();
     _streamPosition?.cancel();
+    _timer?.cancel();
   }
 
   // variables para TR
@@ -78,6 +94,8 @@ class DriverTravelMapController extends GetxController {
 
   String curretStatus = 'Iniciar Viaje';
   Color colorStatus = Color(0XFFE7D42F);
+
+  Client client;
 
   CameraPosition initialPosition = CameraPosition(
     target: LatLng(-19.0394279, -65.2554989),
@@ -159,6 +177,20 @@ class DriverTravelMapController extends GetxController {
         // desiredAccuracy: LocationAccuracy.best,
         distanceFilter: 1,
       ).listen((Position position) {
+        if (travelInfo?.status == 'started') {
+          // la distancia se calculara desde el punto de partida
+          //hasta el punto q ira avanzando el conductor
+          metros = metros +
+              Geolocator.distanceBetween(
+                _position.latitude,
+                _position.longitude,
+                position.latitude,
+                position.longitude,
+              );
+          km = metros / 1000;
+          // km = km.toPrecision(1);
+        }
+
         _position = position;
         addMarker(
           'driver',
@@ -328,6 +360,7 @@ class DriverTravelMapController extends GetxController {
     addSimpleMarker('from', to.latitude, to.longitude, 'Recoger aqui',
         travelInfo.from, fromMarker);
     await setPolylines(from, to);
+    getCliente();
   }
 
   // funciones de cambiado de estado
@@ -367,6 +400,8 @@ class DriverTravelMapController extends GetxController {
       LatLng from = new LatLng(_position.latitude, _position.longitude);
       LatLng to = new LatLng(travelInfo.toLat, travelInfo.toLng);
       setPolylines(from, to);
+      // contador de tiempo
+      startTimer();
       update();
     } else {
       snackError(
@@ -380,12 +415,35 @@ class DriverTravelMapController extends GetxController {
   }
 
   void finishTravel() async {
+    _timer?.cancel();
+    // double total = await calcularPrice();
     Map<String, dynamic> data = {
       'status': 'finished',
     };
     await TravelInfoProvider().actualizar(data, idTravel);
     travelInfo.status = 'finished';
+
+    saveTravelHistory();
+
     update();
+  }
+
+  void saveTravelHistory() async {
+    TravelHistory travelHistory = TravelHistory(
+      from: travelInfo.from,
+      to: travelInfo.to,
+      idDriver: getUser().uid,
+      idClient: idTravel,
+      timestamp: DateTime.now().millisecondsSinceEpoch,
+      price: travelInfo.price,
+    );
+    String id = await TravelHistoryProvider().create(travelHistory);
+    // obtenemos el id del travel history y lo pasamos a la calificacion
+    Get.offAll(
+      () => DriverTravelCalification(),
+      transition: Transition.downToUp,
+      arguments: id,
+    );
   }
 
   /* --------------------------
@@ -431,5 +489,59 @@ class DriverTravelMapController extends GetxController {
       to.longitude,
     );
     print('Distancia $distanceBeetween');
+  }
+
+  // metodo para el tiempo y distancia
+  void startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      // obtendra la suma de uno en uno
+      seconds++;
+      if (seconds % 60 == 0) {
+        seconds = 0;
+        minuto++;
+      }
+      // minuto = minuto.toPrecision(2);
+      update();
+    });
+  }
+
+  // calcular precio
+  Future<double> calcularPrice() async {
+    Prices prices = await PricesProvider().getAll();
+
+    if (seconds < 60) seconds = 60;
+    if (km == 0) km = 0.1;
+    // la division nos da un entero
+    int min = seconds ~/ 60;
+    print('------- Min Totales---------');
+    print(min.toString());
+    print('------- km Totales---------');
+    print(km.toString());
+
+    double priceMin = min * prices.min;
+    double priceKm = km * prices.km;
+    double total = priceKm + priceMin;
+    if (total < prices.minValue) total = prices.minValue;
+
+    return total;
+  }
+
+  // obtenemos info del cliente
+  void getCliente() async {
+    client = await ClientController().getById(idTravel);
+    update();
+  }
+
+  // abrir informacion del conductor
+  void openBottomSheet(context) {
+    if (client == null) return;
+    showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      context: context,
+      builder: (context) => BottomSheetDriver(
+        nombre: client?.username,
+        correo: client?.email,
+      ),
+    );
   }
 }

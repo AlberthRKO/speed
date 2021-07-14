@@ -56,7 +56,9 @@ class DriverTravelMap extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 IconCircle(
-                                  function: () {},
+                                  function: () {
+                                    _.openBottomSheet(context);
+                                  },
                                   icono: FontAwesomeIcons.solidUser,
                                 ),
                                 Column(
@@ -66,13 +68,16 @@ class DriverTravelMap extends StatelessWidget {
                                       child: _infoTravel(
                                           context,
                                           'Distancia',
-                                          'Distancia',
+                                          '${_.km?.toStringAsFixed(2) ?? ''} Km',
                                           FontAwesomeIcons.carSide),
                                     ),
                                     SizedBox(
                                       height: 5,
                                     ),
-                                    _infoTravel(context, 'Tiempo', 'Tiempo',
+                                    _infoTravel(
+                                        context,
+                                        'Tiempo',
+                                        '${_.minuto?.toString() ?? ''}.${_.seconds?.toString() ?? ''} min',
                                         FontAwesomeIcons.solidClock),
                                   ],
                                 ),
