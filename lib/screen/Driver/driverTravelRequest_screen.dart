@@ -77,8 +77,8 @@ class DriverTravelRequest extends StatelessWidget {
                             height: 10,
                           ),
                           Text(
-                            '0',
-                            style: Theme.of(context).textTheme.headline2,
+                            _.seconds.toString(),
+                            style: Theme.of(context).textTheme.headline3,
                           ),
                           SizedBox(
                             height: 10,
@@ -94,7 +94,7 @@ class DriverTravelRequest extends StatelessWidget {
                               child: Button2(
                                 texto: 'Cancelar',
                                 color: Colors.red,
-                                funcion: () {},
+                                funcion: _.cancelTravel,
                               ),
                             ),
                             SizedBox(
@@ -105,7 +105,7 @@ class DriverTravelRequest extends StatelessWidget {
                               child: Button(
                                 texto: 'Aceptar',
                                 color: Theme.of(context).primaryColor,
-                                funcion: () {},
+                                funcion: _.acceptDriver,
                               ),
                             ),
                           ],

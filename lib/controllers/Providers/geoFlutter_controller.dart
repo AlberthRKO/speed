@@ -15,6 +15,13 @@ class Geoflutter extends GetxController {
         .set({'status': 'drivers_available', 'position': myLocation.data});
   }
 
+  Future<void> createWorking(String id, double lat, double log) {
+    GeoFirePoint myLocation = _geo.point(latitude: lat, longitude: log);
+    return _reference
+        .doc(id)
+        .set({'status': 'drivers_working', 'position': myLocation.data});
+  }
+
   // obtenemos los conductores en una consulta segun el status
   Stream<List<DocumentSnapshot>> getNearbyDriver(
       double lat, double log, double radius) {

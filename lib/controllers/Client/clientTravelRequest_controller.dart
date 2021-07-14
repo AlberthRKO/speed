@@ -10,6 +10,9 @@ import 'package:speed/controllers/Driver/driver_controller.dart';
 import 'package:speed/controllers/Providers/geoFlutter_controller.dart';
 import 'package:speed/controllers/Providers/pushNotification_provider.dart';
 import 'package:speed/controllers/Providers/travelInfo_provider.dart';
+import 'package:speed/screen/Client/clientTravelMap_screen.dart';
+import 'package:speed/screen/Client/home_screen.dart';
+import 'package:speed/utils/snackBar.dart';
 
 class ClientTravelRequestController extends GetxController {
   String from;
@@ -22,10 +25,13 @@ class ClientTravelRequestController extends GetxController {
   StreamSubscription<List<DocumentSnapshot>> _streamNerbyDrivers;
   List<String> nearbyDrivers = [];
 
+  StreamSubscription<DocumentSnapshot<Object>> _streamAccept;
+
   @override
   void dispose() {
     super.dispose();
     _streamNerbyDrivers?.cancel();
+    _streamAccept?.cancel();
   }
 
   // String idisito;
@@ -59,6 +65,8 @@ class ClientTravelRequestController extends GetxController {
     );
 
     await TravelInfoProvider().create(travelInfo);
+    // lo ponemos despues de crear la informacion
+    _checkAccepted();
   }
 
   void getNearbyDrivers() {
@@ -91,6 +99,42 @@ class ClientTravelRequestController extends GetxController {
       'destino': to,
     };
     print('DATOSSSSSSSS $data');
-    PushNotificationProvider().sendMessage(token, data);
+    PushNotificationProvider().sendMessage(
+      token,
+      data,
+      'Solcitud de Viaje',
+      'Un cliente esta solicitando un viaje',
+    );
+  }
+
+  // Metodopara saber si acepto el viaje
+  void _checkAccepted() {
+    Stream<DocumentSnapshot> stream =
+        TravelInfoProvider().getByIdStrem(getUser().uid);
+    // escuhamos la respuesta
+    _streamAccept = stream.listen((DocumentSnapshot document) {
+      TravelInfo travelInfo = TravelInfo.fromJson(document.data());
+      if (travelInfo.idDriver != null && travelInfo.status == 'accepted') {
+        Get.offAll(
+          () => ClientTravelMap(),
+          transition: Transition.rightToLeft,
+        );
+        /* Get.off(
+          () => ClientTravelMap(),
+          transition: Transition.rightToLeft,
+        ); */
+      } else if (travelInfo.status == 'no_accepted') {
+        snackError(
+            title: 'Viaje Rechazado',
+            msg: 'El conductor no acepto tu solicitud');
+        Future.delayed(
+          Duration(milliseconds: 2000),
+          () => Get.offAll(
+            () => Home(),
+            transition: Transition.rightToLeft,
+          ),
+        );
+      }
+    });
   }
 }

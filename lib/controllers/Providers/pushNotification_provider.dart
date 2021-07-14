@@ -110,7 +110,8 @@ class PushNotificationProvider extends GetxController {
   } */
 
   // Metodo para enviar las notificaciones push
-  Future<void> sendMessage(String to, Map<String, dynamic> data) async {
+  Future<void> sendMessage(
+      String to, Map<String, dynamic> data, String title, String body) async {
     await http.post(url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -119,8 +120,8 @@ class PushNotificationProvider extends GetxController {
         },
         body: jsonEncode(<String, dynamic>{
           'notification': <String, dynamic>{
-            'body': 'Este es el contenido',
-            'title': 'Este es el titulo',
+            'body': body,
+            'title': title,
           },
           'priority': 'high',
           'ttl': '4500s',
