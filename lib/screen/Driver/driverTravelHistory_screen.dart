@@ -3,15 +3,15 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:speed/Models/travelHistory.dart';
 import 'package:speed/components/background.dart';
-import 'package:speed/controllers/Client/clientTravelHistory_controller.dart';
+import 'package:speed/controllers/Driver/driverTravelHistory_controller.dart';
 import 'package:speed/utils/relative_time_util.dart';
 
-class ClientTravelHistory extends StatelessWidget {
+class DriverTravelHistory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return GetBuilder<ClientTravelHistoryController>(
-      init: ClientTravelHistoryController(),
+    return GetBuilder<DriverTravelHistoryController>(
+      init: DriverTravelHistoryController(),
       builder: (_con) => Background(
         taman: size.width > 450 ? 750 : 550,
         child: Column(
@@ -29,11 +29,11 @@ class ClientTravelHistory extends StatelessWidget {
                     itemBuilder: (_, index) {
                       return cardInfo(
                         context,
-                        snapshot.data[index].nameDriver,
+                        snapshot.data[index].nameClient,
                         snapshot.data[index].from,
                         snapshot.data[index].to,
                         snapshot.data[index].price?.toString(),
-                        snapshot.data[index].calificationDriver?.toString(),
+                        snapshot.data[index].calificationClient?.toString(),
                         RelativeTimeUtil.getRelativeTime(
                             snapshot.data[index].timestamp ?? 0),
                       );
@@ -62,9 +62,9 @@ class ClientTravelHistory extends StatelessWidget {
         children: [
           infoTravel(
             context,
-            'Conductor',
+            'Cliente',
             name ?? '',
-            FontAwesomeIcons.carSide,
+            FontAwesomeIcons.solidUser,
           ),
           infoTravel(
             context,

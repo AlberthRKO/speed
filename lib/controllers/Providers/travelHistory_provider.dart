@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:speed/Models/client.dart';
+import 'package:speed/Models/driver.dart';
 import 'package:speed/Models/travelHistory.dart';
+import 'package:speed/controllers/Client/cliente_controller.dart';
+import 'package:speed/controllers/Driver/driver_controller.dart';
 
 class TravelHistoryProvider extends GetxController {
   final CollectionReference _reference =
@@ -55,11 +59,11 @@ class TravelHistoryProvider extends GetxController {
   Future<List<TravelHistory>> getByIdClient(String idClient) async {
     QuerySnapshot querySnapshot = await _reference
         .where('idClient', isEqualTo: idClient)
-        .orderBy('timestamp', descending: false)
+        .orderBy('timestamp', descending: true)
         .get();
     // Pasamos la respuesta del query en una lista
-    List<Map<String, dynamic>> allData =
-        querySnapshot.docs.map((doc) => doc.data()).toList();
+    List allData = [];
+    allData = querySnapshot.docs.map((doc) => doc.data()).toList();
 
     // Convertimos el mapa a una lista de tipo travelHistory
     List<TravelHistory> travelHistoryList = [];
@@ -67,6 +71,38 @@ class TravelHistoryProvider extends GetxController {
     for (Map<String, dynamic> data in allData) {
       // y asi llenamos puros objetos de tipo travelHistory
       travelHistoryList.add(TravelHistory.fromJson(data));
+    }
+
+    // hacemos un recorrido por la lista para agregar el username del driver
+    for (TravelHistory travelHistory in travelHistoryList) {
+      Driver driver = await DriverController().getById(travelHistory.idDriver);
+      travelHistory.nameDriver = driver.username;
+    }
+
+    return travelHistoryList;
+  }
+
+  Future<List<TravelHistory>> getByIdDriver(String idDriver) async {
+    QuerySnapshot querySnapshot = await _reference
+        .where('idDriver', isEqualTo: idDriver)
+        .orderBy('timestamp', descending: true)
+        .get();
+    // Pasamos la respuesta del query en una lista
+    List allData = [];
+    allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+
+    // Convertimos el mapa a una lista de tipo travelHistory
+    List<TravelHistory> travelHistoryList = [];
+
+    for (Map<String, dynamic> data in allData) {
+      // y asi llenamos puros objetos de tipo travelHistory
+      travelHistoryList.add(TravelHistory.fromJson(data));
+    }
+
+    // hacemos un recorrido por la lista para agregar el username del driver
+    for (TravelHistory travelHistory in travelHistoryList) {
+      Client client = await ClientController().getById(travelHistory.idClient);
+      travelHistory.nameClient = client.username;
     }
 
     return travelHistoryList;

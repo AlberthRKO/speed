@@ -77,7 +77,7 @@ class DriverEditProfile extends StatelessWidget {
                                     height: 10,
                                   ),
                                   Text(
-                                    'alberth@alberth.com',
+                                    _.driver?.email ?? '',
                                     style: TextStyle(
                                       fontSize: 15,
                                       fontStyle: FontStyle.italic,

@@ -12,6 +12,7 @@ import 'package:speed/controllers/Driver/driver_controller.dart';
 import 'package:speed/controllers/Providers/geoFlutter_controller.dart';
 import 'package:speed/controllers/Providers/pushNotification_provider.dart';
 import 'package:speed/screen/Driver/driverEditProfile_screen.dart';
+import 'package:speed/screen/Driver/driverTravelHistory_screen.dart';
 import 'package:speed/theme/themeChange.dart';
 import 'package:speed/utils/snackBar.dart';
 
@@ -349,6 +350,13 @@ class DriverMapController extends GetxController {
     Get.to(
       () => DriverEditProfile(),
       transition: Transition.upToDown,
+    );
+  }
+
+  void goTravelHistory() {
+    Get.to(
+      () => DriverTravelHistory(),
+      transition: Transition.downToUp,
     );
   }
 }

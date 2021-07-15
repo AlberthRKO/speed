@@ -76,10 +76,7 @@ class ClientEditProfileController extends GetxController {
     Future.delayed(
       Duration(seconds: 2),
       () {
-        Get.off(
-          () => Home(),
-          transition: Transition.upToDown,
-        );
+        Get.back();
       },
     );
   }
@@ -111,7 +108,10 @@ class ClientEditProfileController extends GetxController {
     );
 
     AlertDialog alertDialog = AlertDialog(
-      title: Text('Selecciona tu imagen'),
+      title: Text(
+        'Selecciona tu imagen',
+        style: Theme.of(context).textTheme.headline3,
+      ),
       actions: [
         galleryButton,
         cameraButton,

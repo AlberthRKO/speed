@@ -16,6 +16,8 @@ class TravelHistory {
     this.idDriver,
     this.from,
     this.to,
+    this.nameDriver,
+    this.nameClient,
     this.timestamp,
     this.calificationClient,
     this.calificationDriver,
@@ -27,6 +29,8 @@ class TravelHistory {
   String idDriver;
   String from;
   String to;
+  String nameDriver;
+  String nameClient;
   int timestamp;
   double calificationClient;
   double calificationDriver;
@@ -38,6 +42,8 @@ class TravelHistory {
         idDriver: json["idDriver"],
         from: json["from"],
         to: json["to"],
+        nameDriver: json["nameDriver"],
+        nameClient: json["nameClient"],
         timestamp: json["timestamp"],
         calificationClient: json["calificationClient"]?.toDouble() ?? 0,
         calificationDriver: json["calificationDriver"]?.toDouble() ?? 0,
@@ -50,6 +56,8 @@ class TravelHistory {
         "idDriver": idDriver,
         "from": from,
         "to": to,
+        "nameDriver": nameDriver,
+        "nameClient": nameClient,
         "timestamp": timestamp,
         "calificationClient": calificationClient,
         "calificationDriver": calificationDriver,
