@@ -25,7 +25,7 @@ class DriverTravelRequest extends StatelessWidget {
                   size.width > 450
                       ? Container()
                       : Avatar(
-                          imagen: Image.asset(
+                          backgroundImage: AssetImage(
                             'assets/images/yo.jpg',
                           ),
                           radio: 45,
@@ -76,7 +76,7 @@ class DriverTravelRequest extends StatelessWidget {
                           infoTravel(
                             context,
                             'Precio:',
-                            _.price ?? '',
+                            '${_?.price ?? ''} Bs',
                             FontAwesomeIcons.dollarSign,
                             () {},
                           ),

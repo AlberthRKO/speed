@@ -53,9 +53,9 @@ class SidebarClient extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Avatar(
-                        imagen: Image.asset(
-                          'assets/images/yo.jpg',
-                        ),
+                        backgroundImage: _info.client?.image != null
+                            ? NetworkImage(_info.client?.image)
+                            : AssetImage('assets/images/yo.jpg'),
                         radio: 40,
                       ),
                       SizedBox(
@@ -95,6 +95,7 @@ class SidebarClient extends StatelessWidget {
                       MenuOption(
                         icono: FontAwesomeIcons.user,
                         text: 'Perfil',
+                        link: _info.goEditProfile,
                       ),
                       SizedBox(
                         height: 15,

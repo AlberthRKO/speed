@@ -16,6 +16,7 @@ import 'package:speed/components/bottomSheet.dart';
 import 'package:speed/controllers/Driver/driver_controller.dart';
 import 'package:speed/controllers/Providers/geoFlutter_controller.dart';
 import 'package:speed/controllers/Providers/travelInfo_provider.dart';
+import 'package:speed/screen/Client/clientTravelCalification_screen.dart';
 import 'package:speed/theme/themeChange.dart';
 import 'package:speed/utils/snackBar.dart';
 
@@ -41,6 +42,7 @@ class ClientTravelMapController extends GetxController {
   // variable para no trazar mas rutas
   bool isPickupTravel = false;
   bool isStartTravel = false;
+  bool isfinishedTravel = false;
 
   StreamSubscription<DocumentSnapshot<Object>> streamStatus;
 
@@ -217,6 +219,7 @@ class ClientTravelMapController extends GetxController {
           startTravel();
         } else if (travelInfo.status == 'finished') {
           curretStatus = 'Viaje Finalizado';
+          finishTravel();
         }
         update();
       },
@@ -330,11 +333,25 @@ class ClientTravelMapController extends GetxController {
       backgroundColor: Colors.transparent,
       context: context,
       builder: (context) => BottomSheetClient(
+        url: driver?.image,
         nombre: driver?.username,
         correo: driver?.email,
         modelo: driver?.modelo,
         placa: driver?.placa,
       ),
     );
+  }
+
+  // funcion que se ejecuta cunado el conductor finaliza el viaje
+  void finishTravel() {
+    if (!isfinishedTravel) {
+      isfinishedTravel = true;
+      // le pasamos el id en que se actualizara en el listen
+      Get.offAll(
+        () => ClientTravelCalification(),
+        transition: Transition.leftToRight,
+        arguments: travelInfo.idTravelHistory,
+      );
+    }
   }
 }

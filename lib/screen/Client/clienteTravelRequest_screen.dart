@@ -24,7 +24,7 @@ class ClientTravelRequest extends StatelessWidget {
               Column(
                 children: [
                   Avatar(
-                    imagen: Image.asset(
+                    backgroundImage: AssetImage(
                       'assets/images/yo.jpg',
                     ),
                     radio: 45,

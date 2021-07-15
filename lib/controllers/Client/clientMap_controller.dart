@@ -14,6 +14,7 @@ import 'package:speed/Models/driver.dart';
 import 'package:speed/controllers/Client/cliente_controller.dart';
 import 'package:speed/controllers/Providers/geoFlutter_controller.dart';
 import 'package:speed/controllers/Providers/pushNotification_provider.dart';
+import 'package:speed/screen/Client/clientEditProfile_screen.dart';
 import 'package:speed/screen/Client/clientTravelInfo_screen.dart';
 import 'package:speed/theme/themeChange.dart';
 import 'package:geolocator/geolocator.dart';
@@ -454,5 +455,12 @@ class ClientMapController extends GetxController {
       'hola': 5,
     };
     ClientController().actualizar(hola, getUser().uid);
+  }
+
+  void goEditProfile() {
+    Get.to(
+      () => ClientEditProfile(),
+      transition: Transition.upToDown,
+    );
   }
 }

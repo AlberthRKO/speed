@@ -39,9 +39,9 @@ class TravelHistory {
         from: json["from"],
         to: json["to"],
         timestamp: json["timestamp"],
-        calificationClient: json["calificationClient"].toDouble(),
-        calificationDriver: json["calificationDriver"].toDouble(),
-        price: json["price"].toDouble(),
+        calificationClient: json["calificationClient"]?.toDouble() ?? 0,
+        calificationDriver: json["calificationDriver"]?.toDouble() ?? 0,
+        price: json["price"]?.toDouble() ?? 0,
       );
 
   Map<String, dynamic> toJson() => {

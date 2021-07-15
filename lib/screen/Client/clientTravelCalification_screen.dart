@@ -54,19 +54,19 @@ class ClientTravelCalification extends StatelessWidget {
                     infoTravel(
                       context,
                       'Desde',
-                      'asdasdsad',
+                      '${_.travelHistory?.from ?? ''}',
                       FontAwesomeIcons.mapMarkedAlt,
                     ),
                     infoTravel(
                       context,
                       'Hasta',
-                      'asdasdsad asdsa',
+                      '${_.travelHistory?.to ?? ''}',
                       FontAwesomeIcons.mapMarkedAlt,
                     ),
                     infoTravel(
                       context,
                       'Precio',
-                      '15 Bs',
+                      '${_.travelHistory?.price ?? ''} Bs',
                       FontAwesomeIcons.dollarSign,
                     ),
                     SizedBox(
@@ -100,6 +100,7 @@ class ClientTravelCalification extends StatelessWidget {
                       itemPadding: EdgeInsets.symmetric(horizontal: 10),
                       direction: Axis.horizontal,
                       onRatingUpdate: (rating) {
+                        _.calification = rating;
                         print(rating);
                       },
                     ),
@@ -107,9 +108,10 @@ class ClientTravelCalification extends StatelessWidget {
                 ),
               ),
               Button(
-                  texto: 'Calificar Viaje',
-                  color: Theme.of(context).primaryColor,
-                  funcion: () {}),
+                texto: 'Calificar Viaje',
+                color: Theme.of(context).primaryColor,
+                funcion: _.calificate,
+              ),
             ],
           ),
         ),

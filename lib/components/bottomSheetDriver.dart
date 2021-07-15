@@ -60,9 +60,9 @@ class BottomSheetDriver extends StatelessWidget {
                   size.width > 450
                       ? Container()
                       : Avatar(
-                          imagen: Image.asset(
-                            url,
-                          ),
+                          backgroundImage: url != null
+                              ? NetworkImage(url)
+                              : AssetImage('assets/images/yo.jpg'),
                           radio: 40,
                         ),
                   SizedBox(

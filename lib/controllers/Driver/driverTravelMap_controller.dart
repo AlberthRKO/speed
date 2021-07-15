@@ -417,11 +417,6 @@ class DriverTravelMapController extends GetxController {
   void finishTravel() async {
     _timer?.cancel();
     // double total = await calcularPrice();
-    Map<String, dynamic> data = {
-      'status': 'finished',
-    };
-    await TravelInfoProvider().actualizar(data, idTravel);
-    travelInfo.status = 'finished';
 
     saveTravelHistory();
 
@@ -439,6 +434,14 @@ class DriverTravelMapController extends GetxController {
     );
     String id = await TravelHistoryProvider().create(travelHistory);
     // obtenemos el id del travel history y lo pasamos a la calificacion
+
+    // Actualizamos la bd con el id del history para enviarlo al cliente
+    Map<String, dynamic> data = {
+      'status': 'finished',
+      'idTravelHistory': id,
+    };
+    await TravelInfoProvider().actualizar(data, idTravel);
+    travelInfo.status = 'finished';
     Get.offAll(
       () => DriverTravelCalification(),
       transition: Transition.downToUp,
@@ -539,6 +542,7 @@ class DriverTravelMapController extends GetxController {
       backgroundColor: Colors.transparent,
       context: context,
       builder: (context) => BottomSheetDriver(
+        url: client?.image,
         nombre: client?.username,
         correo: client?.email,
       ),

@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 class Avatar extends StatelessWidget {
   const Avatar({
     Key key,
-    @required this.imagen,
     this.radio = 40,
+    @required this.backgroundImage,
   }) : super(key: key);
 
-  final Widget imagen;
+  final ImageProvider<Object> backgroundImage;
   final double radio;
 
   @override
@@ -26,9 +26,7 @@ class Avatar extends StatelessWidget {
       ),
       child: CircleAvatar(
         radius: radio,
-        child: ClipOval(
-          child: imagen,
-        ),
+        backgroundImage: backgroundImage,
       ),
     );
   }

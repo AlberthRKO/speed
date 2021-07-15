@@ -53,9 +53,9 @@ class Sidebar extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Avatar(
-                        imagen: Image.asset(
-                          'assets/images/yo.jpg',
-                        ),
+                        backgroundImage: _info.driver?.image != null
+                            ? NetworkImage(_info.driver?.image)
+                            : AssetImage('assets/images/yo.jpg'),
                         radio: 40,
                       ),
                       SizedBox(
@@ -95,13 +95,10 @@ class Sidebar extends StatelessWidget {
                       MenuOption(
                         icono: FontAwesomeIcons.user,
                         text: 'Perfil',
+                        link: _info.goEditProfile,
                       ),
                       SizedBox(
                         height: 15,
-                      ),
-                      MenuOption(
-                        icono: FontAwesomeIcons.history,
-                        text: 'Historial de Viajes',
                       ),
                     ],
                   ),

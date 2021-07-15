@@ -11,6 +11,7 @@ class Client {
     this.email,
     this.password,
     this.token,
+    this.image,
   });
 
   String id;
@@ -18,6 +19,7 @@ class Client {
   String email;
   String password;
   String token;
+  String image;
 
   factory Client.fromJson(Map<String, dynamic> json) => Client(
         id: json["id"],
@@ -25,12 +27,15 @@ class Client {
         email: json["email"],
         password: json["password"],
         token: json["token"],
+        image: json["image"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "username": username,
         "email": email,
+        "token": token,
+        "image": image,
         // "password": password,
       };
 }

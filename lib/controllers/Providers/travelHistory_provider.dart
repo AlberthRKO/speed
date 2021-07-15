@@ -14,7 +14,7 @@ class TravelHistoryProvider extends GetxController {
       // al id de la colleccion
       String id = _reference.doc().id;
       travelHistory.id = id;
-      await _reference.doc().set(travelHistory.toJson());
+      await _reference.doc(travelHistory.id).set(travelHistory.toJson());
       return id;
     } catch (e) {
       print(e);
