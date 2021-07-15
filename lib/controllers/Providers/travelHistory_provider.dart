@@ -49,4 +49,26 @@ class TravelHistoryProvider extends GetxController {
   Future<void> eliminar(String id) {
     return _reference.doc(id).delete();
   }
+
+  // Funcion para tener todas las respuestas en las que haya un id client
+  // tenddremos una lista de modelos de travelHistory
+  Future<List<TravelHistory>> getByIdClient(String idClient) async {
+    QuerySnapshot querySnapshot = await _reference
+        .where('idClient', isEqualTo: idClient)
+        .orderBy('timestamp', descending: false)
+        .get();
+    // Pasamos la respuesta del query en una lista
+    List<Map<String, dynamic>> allData =
+        querySnapshot.docs.map((doc) => doc.data()).toList();
+
+    // Convertimos el mapa a una lista de tipo travelHistory
+    List<TravelHistory> travelHistoryList = [];
+
+    for (Map<String, dynamic> data in allData) {
+      // y asi llenamos puros objetos de tipo travelHistory
+      travelHistoryList.add(TravelHistory.fromJson(data));
+    }
+
+    return travelHistoryList;
+  }
 }

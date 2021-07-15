@@ -103,6 +103,7 @@ class SidebarClient extends StatelessWidget {
                       MenuOption(
                         icono: FontAwesomeIcons.history,
                         text: 'Historial de Viajes',
+                        link: _info.goTravelHistory,
                       ),
                     ],
                   ),
