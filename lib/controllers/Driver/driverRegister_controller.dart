@@ -47,9 +47,11 @@ class DriverRegisterController extends GetxController {
   }
 
   PickedFile pickedFile;
+  PickedFile pickedFileModelo;
   File imageFile;
   File imagenDriver;
   var selectImagePath = ''.obs;
+  var selectImagePathModelo = ''.obs;
   var selectImageSize = ''.obs;
 
   Future<void> registrarUser(context) async {
@@ -59,7 +61,9 @@ class DriverRegisterController extends GetxController {
     String emaill = email.text;
     String pass = password.text;
     String passCon = passwordConfirm.text;
+
     String imageUrl = '';
+    String imageUrlModelo = '';
     ProgressDialog pr =
         Progresso.crearProgress(context, 'Espere un momento...');
 
@@ -94,16 +98,19 @@ class DriverRegisterController extends GetxController {
       return;
     }
     // pr.show();
-    if (pickedFile == null) {
+    if (pickedFile == null || pickedFileModelo == null) {
       snackError(
         title: 'Error',
-        msg: 'Debe seleccionar una foto de perfil',
+        msg: 'Debe cargar todas las fotos',
       );
       return;
     } else {
       pr.show();
       TaskSnapshot snapshot = await StorageProvider().uploadFile(pickedFile);
+      TaskSnapshot snapshotModelo =
+          await StorageProvider().uploadFile(pickedFileModelo);
       imageUrl = await snapshot.ref.getDownloadURL();
+      imageUrlModelo = await snapshotModelo.ref.getDownloadURL();
       pr.hide();
     }
     // pr.hide();
@@ -127,6 +134,7 @@ class DriverRegisterController extends GetxController {
           email: emaill,
           password: pass,
           image: imageUrl,
+          imageModelo: imageUrlModelo,
           // image: imageUrl,
         );
 
@@ -208,6 +216,51 @@ class DriverRegisterController extends GetxController {
     Widget cameraButton = TextButton(
       onPressed: () {
         pickImagenn(ImageSource.camera);
+      },
+      child: Text('CAMARA'),
+    );
+
+    AlertDialog alertDialog = AlertDialog(
+      title: Text(
+        'Selecciona tu imagen',
+        style: Theme.of(context).textTheme.headline5,
+      ),
+      actions: [
+        galleryButton,
+        cameraButton,
+      ],
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alertDialog;
+      },
+    );
+  }
+
+  Future pickImagenModelo(ImageSource imageSource) async {
+    pickedFileModelo = await ImagePicker().getImage(source: imageSource);
+    if (pickedFileModelo != null) {
+      selectImagePathModelo.value = pickedFileModelo.path;
+    } else {
+      print('No selecciono ninguna imagen');
+    }
+    Get.back();
+    update();
+  }
+
+  // Elegir entre camara o foto
+  void showAlertDialogModelo(context) {
+    Widget galleryButton = TextButton(
+      onPressed: () {
+        pickImagenModelo(ImageSource.gallery);
+      },
+      child: Text('GALERIA'),
+    );
+    Widget cameraButton = TextButton(
+      onPressed: () {
+        pickImagenModelo(ImageSource.camera);
       },
       child: Text('CAMARA'),
     );

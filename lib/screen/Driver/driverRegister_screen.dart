@@ -128,6 +128,37 @@ class DriverRegister extends StatelessWidget {
                                   SizedBox(
                                     height: 10,
                                   ),
+                                  GestureDetector(
+                                    onTap: () =>
+                                        _.showAlertDialogModelo(context),
+                                    child: Obx(
+                                      () => _.selectImagePathModelo.value == ''
+                                          ? ImagenDriver(
+                                              backgroundImage: AssetImage(
+                                                  'assets/images/modelo.png'),
+                                            )
+                                          : ImagenDriver(
+                                              backgroundImage: FileImage(
+                                                File(_.selectImagePathModelo
+                                                    .value),
+                                              ),
+                                            ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    'Foto del modelo del vehiculo',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontStyle: FontStyle.italic,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
                                   InputControl(
                                     controlador: _.placa,
                                     hint: 'Placa',

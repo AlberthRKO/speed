@@ -32,6 +32,30 @@ class Avatar extends StatelessWidget {
   }
 }
 
+class ImagenDriver extends StatelessWidget {
+  const ImagenDriver({
+    Key key,
+    this.radio = 40,
+    @required this.backgroundImage,
+  }) : super(key: key);
+
+  final ImageProvider<Object> backgroundImage;
+  final double radio;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 100,
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Image(image: backgroundImage),
+    );
+  }
+}
+
 class IconCircle extends StatelessWidget {
   const IconCircle({
     Key key,
