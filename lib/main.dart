@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:speed/controllers/Providers/pushNotification_provider.dart';
+import 'package:speed/screen/Client/clientHistoryDetail_screen.dart';
 import 'package:speed/screen/Driver/driverTravelRequest_screen.dart';
 import 'package:speed/screen/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';

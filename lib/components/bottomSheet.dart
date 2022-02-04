@@ -16,7 +16,7 @@ class BottomSheetClient extends StatelessWidget {
     @required this.correo,
     @required this.modelo,
     @required this.placa,
-    this.url = 'assets/images/yo.jpg',
+    this.url = 'assets/images/yo.png',
   }) : super(key: key);
 
   @override
@@ -83,7 +83,7 @@ class BottomSheetClient extends StatelessWidget {
                       : Avatar(
                           backgroundImage: url != null
                               ? NetworkImage(url)
-                              : AssetImage('assets/images/yo.jpg'),
+                              : AssetImage('assets/images/yo.png'),
                           radio: 40,
                         ),
                   SizedBox(

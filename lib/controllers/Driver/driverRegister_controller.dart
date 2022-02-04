@@ -1,9 +1,14 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:speed/Models/driver.dart';
 import 'package:speed/controllers/Driver/driver_controller.dart';
+import 'package:speed/controllers/Providers/storage_provider.dart';
 import 'package:speed/screen/Driver/homeDriver_screen.dart';
 import 'package:speed/utils/progress.dart';
 
@@ -41,6 +46,12 @@ class DriverRegisterController extends GetxController {
     super.dispose();
   }
 
+  PickedFile pickedFile;
+  File imageFile;
+  File imagenDriver;
+  var selectImagePath = ''.obs;
+  var selectImageSize = ''.obs;
+
   Future<void> registrarUser(context) async {
     String nombre = name.text;
     String model = modelo.text;
@@ -48,8 +59,10 @@ class DriverRegisterController extends GetxController {
     String emaill = email.text;
     String pass = password.text;
     String passCon = passwordConfirm.text;
+    String imageUrl = '';
     ProgressDialog pr =
         Progresso.crearProgress(context, 'Espere un momento...');
+
     // creamos el progress dialog
 
     /* if (nombre.isEmpty && emaill.isEmpty && pass.isEmpty && passCon.isEmpty) {
@@ -80,6 +93,21 @@ class DriverRegisterController extends GetxController {
       );
       return;
     }
+    // pr.show();
+    if (pickedFile == null) {
+      snackError(
+        title: 'Error',
+        msg: 'Debe seleccionar una foto de perfil',
+      );
+      return;
+    } else {
+      pr.show();
+      TaskSnapshot snapshot = await StorageProvider().uploadFile(pickedFile);
+      imageUrl = await snapshot.ref.getDownloadURL();
+      pr.hide();
+    }
+    // pr.hide();
+
     pr.show();
 
     try {
@@ -98,6 +126,8 @@ class DriverRegisterController extends GetxController {
           placa: placaa,
           email: emaill,
           password: pass,
+          image: imageUrl,
+          // image: imageUrl,
         );
 
         await DriverController().create(driver);
@@ -133,6 +163,72 @@ class DriverRegisterController extends GetxController {
         colorText: Theme.of(context).hintColor,
       );
     }
+  }
+
+  /* // *Seccion de imagen registro */
+/* 
+  Future getImageFromGallery(ImageSource imageSource) async {
+    pickedFile = await ImagePicker().getImage(source: imageSource);
+    if (pickedFile != null) {
+      imageFile = File(pickedFile.path);
+      print(imageFile.path);
+      print('kheeeeee $imageFile');
+      print('aqui esta $pickedFile');
+    } else {
+      print('No selecciono ninguna imagen');
+    }
+    Get.back();
+    update();
+  } */
+
+  //Correcto
+  Future pickImagenn(ImageSource imageSource) async {
+    pickedFile = await ImagePicker().getImage(source: imageSource);
+    if (pickedFile != null) {
+      selectImagePath.value = pickedFile.path;
+      selectImageSize.value =
+          ((File(selectImagePath.value)).lengthSync() / 1024 / 1024)
+                  .toStringAsFixed(2) +
+              " MB";
+    } else {
+      print('No selecciono ninguna imagen');
+    }
+    Get.back();
+    update();
+  }
+
+  // Elegir entre camara o foto
+  void showAlertDialog(context) {
+    Widget galleryButton = TextButton(
+      onPressed: () {
+        pickImagenn(ImageSource.gallery);
+      },
+      child: Text('GALERIA'),
+    );
+    Widget cameraButton = TextButton(
+      onPressed: () {
+        pickImagenn(ImageSource.camera);
+      },
+      child: Text('CAMARA'),
+    );
+
+    AlertDialog alertDialog = AlertDialog(
+      title: Text(
+        'Selecciona tu imagen',
+        style: Theme.of(context).textTheme.headline5,
+      ),
+      actions: [
+        galleryButton,
+        cameraButton,
+      ],
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alertDialog;
+      },
+    );
   }
 
   void snackError({@required title, @required msg}) {

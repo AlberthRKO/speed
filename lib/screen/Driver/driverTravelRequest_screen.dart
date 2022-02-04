@@ -26,7 +26,7 @@ class DriverTravelRequest extends StatelessWidget {
                       ? Container()
                       : Avatar(
                           backgroundImage: AssetImage(
-                            'assets/images/yo.jpg',
+                            'assets/images/yo.png',
                           ),
                           radio: 45,
                         ),

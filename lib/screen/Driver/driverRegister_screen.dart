@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:speed/components/avatar.dart';
 import 'package:speed/components/background.dart';
 import 'package:speed/components/button.dart';
 import 'package:speed/components/inputForm.dart';
@@ -68,6 +71,37 @@ class DriverRegister extends StatelessWidget {
                               duration: Duration(milliseconds: 2000),
                               child: Column(
                                 children: [
+                                  // Agregar imagen con obx
+                                  GestureDetector(
+                                    onTap: () => _.showAlertDialog(context),
+                                    child: Obx(
+                                      () => _.selectImagePath.value == ''
+                                          ? Avatar(
+                                              backgroundImage: AssetImage(
+                                                  'assets/images/yo.png'),
+                                            )
+                                          : Avatar(
+                                              backgroundImage: FileImage(
+                                                File(_.selectImagePath.value),
+                                              ),
+                                            ),
+                                    ),
+                                  ),
+
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    'Foto de perfil',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontStyle: FontStyle.italic,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
                                   InputControl(
                                     controlador: _.name,
                                     hint: 'Nombre',

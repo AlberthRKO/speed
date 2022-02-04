@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -81,14 +83,23 @@ class ClientEditProfile extends StatelessWidget {
                                 children: [
                                   GestureDetector(
                                     onTap: () => _.showAlertDialog(context),
-                                    child: Avatar(
-                                      backgroundImage: _.imageFile != null
-                                          ? AssetImage(_.imageFile?.path ??
-                                              'assets/images/yo.jpg')
-                                          : _.client?.image != null
-                                              ? NetworkImage(_.client?.image)
-                                              : AssetImage(_.imageFile?.path ??
-                                                  'assets/images/yo.jpg'),
+                                    child: Obx(
+                                      () => _.selectImagePath.value == ''
+                                          ? Avatar(
+                                              backgroundImage: _
+                                                          .client?.image !=
+                                                      null
+                                                  ? NetworkImage(
+                                                      _.client?.image)
+                                                  : AssetImage(_
+                                                          .imageFile?.path ??
+                                                      'assets/images/yo.png'),
+                                            )
+                                          : Avatar(
+                                              backgroundImage: FileImage(
+                                                File(_.selectImagePath.value),
+                                              ),
+                                            ),
                                     ),
                                   ),
                                   SizedBox(

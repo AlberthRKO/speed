@@ -44,7 +44,7 @@ class SidebarClient extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 /* ClipOval(
-                child: Image.asset('assets/images/yo.jpg'),
+                child: Image.asset('assets/images/yo.png'),
               ), */
                 //opcion para imagenes SVG y jpg
                 GetBuilder<ClientMapController>(
@@ -55,7 +55,7 @@ class SidebarClient extends StatelessWidget {
                       Avatar(
                         backgroundImage: _info.client?.image != null
                             ? NetworkImage(_info.client?.image)
-                            : AssetImage('assets/images/yo.jpg'),
+                            : AssetImage('assets/images/yo.png'),
                         radio: 40,
                       ),
                       SizedBox(

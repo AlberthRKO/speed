@@ -25,7 +25,7 @@ class ClientTravelRequest extends StatelessWidget {
                 children: [
                   Avatar(
                     backgroundImage: AssetImage(
-                      'assets/images/yo.jpg',
+                      'assets/images/yo.png',
                     ),
                     radio: 45,
                   ),

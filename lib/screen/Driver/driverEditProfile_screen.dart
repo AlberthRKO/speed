@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -63,14 +65,23 @@ class DriverEditProfile extends StatelessWidget {
                                 children: [
                                   GestureDetector(
                                     onTap: () => _.showAlertDialog(context),
-                                    child: Avatar(
-                                      backgroundImage: _.imageFile != null
-                                          ? AssetImage(_.imageFile?.path ??
-                                              'assets/images/yo.jpg')
-                                          : _.driver?.image != null
-                                              ? NetworkImage(_.driver?.image)
-                                              : AssetImage(_.imageFile?.path ??
-                                                  'assets/images/yo.jpg'),
+                                    child: Obx(
+                                      () => _.selectImagePath.value == ''
+                                          ? Avatar(
+                                              backgroundImage: _
+                                                          .driver?.image !=
+                                                      null
+                                                  ? NetworkImage(
+                                                      _.driver?.image)
+                                                  : AssetImage(_
+                                                          .imageFile?.path ??
+                                                      'assets/images/yo.png'),
+                                            )
+                                          : Avatar(
+                                              backgroundImage: FileImage(
+                                                File(_.selectImagePath.value),
+                                              ),
+                                            ),
                                     ),
                                   ),
                                   SizedBox(

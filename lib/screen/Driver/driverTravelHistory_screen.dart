@@ -36,6 +36,9 @@ class DriverTravelHistory extends StatelessWidget {
                         snapshot.data[index].calificationClient?.toString(),
                         RelativeTimeUtil.getRelativeTime(
                             snapshot.data[index].timestamp ?? 0),
+                        () {
+                          _con.goTravelDetail(snapshot.data[index].id);
+                        },
                       );
                     },
                   );
@@ -56,47 +59,51 @@ class DriverTravelHistory extends StatelessWidget {
     String price,
     String calication,
     String timestamp,
+    Function funcion,
   ) {
-    return BoxForm2(
-      child: Column(
-        children: [
-          infoTravel(
-            context,
-            'Cliente',
-            name ?? '',
-            FontAwesomeIcons.solidUser,
-          ),
-          infoTravel(
-            context,
-            'Desde',
-            from ?? '',
-            FontAwesomeIcons.mapMarkedAlt,
-          ),
-          infoTravel(
-            context,
-            'Hasta',
-            to ?? '',
-            FontAwesomeIcons.mapMarkedAlt,
-          ),
-          infoTravel(
-            context,
-            'Precio',
-            price ?? '0 Bs',
-            FontAwesomeIcons.dollarSign,
-          ),
-          infoTravel(
-            context,
-            'Calificación',
-            calication ?? '',
-            FontAwesomeIcons.solidStar,
-          ),
-          infoTravel(
-            context,
-            'Hace',
-            timestamp ?? '',
-            FontAwesomeIcons.solidClock,
-          ),
-        ],
+    return GestureDetector(
+      onTap: funcion,
+      child: BoxForm2(
+        child: Column(
+          children: [
+            infoTravel(
+              context,
+              'Cliente',
+              name ?? '',
+              FontAwesomeIcons.solidUser,
+            ),
+            infoTravel(
+              context,
+              'Desde',
+              from ?? '',
+              FontAwesomeIcons.mapMarkedAlt,
+            ),
+            infoTravel(
+              context,
+              'Hasta',
+              to ?? '',
+              FontAwesomeIcons.mapMarkedAlt,
+            ),
+            infoTravel(
+              context,
+              'Precio',
+              price ?? '0 Bs',
+              FontAwesomeIcons.dollarSign,
+            ),
+            infoTravel(
+              context,
+              'Calificación',
+              calication ?? '',
+              FontAwesomeIcons.solidStar,
+            ),
+            infoTravel(
+              context,
+              'Hace',
+              timestamp ?? '',
+              FontAwesomeIcons.solidClock,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -31,6 +31,9 @@ class DriverEditProfileController extends GetxController {
 
   PickedFile pickedFile;
   File imageFile;
+  File imagenDriver;
+  var selectImagePath = ''.obs;
+  var selectImageSize = ''.obs;
 
   Driver driver;
 
@@ -88,15 +91,32 @@ class DriverEditProfileController extends GetxController {
       Duration(seconds: 2),
       () {
         Get.back();
+        Get.back();
       },
     );
   }
 
-  Future getImageFromGallery(ImageSource imageSource) async {
+  /* Future getImageFromGallery(ImageSource imageSource) async {
     pickedFile = await ImagePicker().getImage(source: imageSource);
     if (pickedFile != null) {
       imageFile = File(pickedFile.path);
       print('kheeeeee $imageFile');
+    } else {
+      print('No selecciono ninguna imagen');
+    }
+    Get.back();
+    update();
+  } */
+
+//Correcto
+  Future pickImagenn(ImageSource imageSource) async {
+    pickedFile = await ImagePicker().getImage(source: imageSource);
+    if (pickedFile != null) {
+      selectImagePath.value = pickedFile.path;
+      selectImageSize.value =
+          ((File(selectImagePath.value)).lengthSync() / 1024 / 1024)
+                  .toStringAsFixed(2) +
+              " MB";
     } else {
       print('No selecciono ninguna imagen');
     }
@@ -108,13 +128,13 @@ class DriverEditProfileController extends GetxController {
   void showAlertDialog(context) {
     Widget galleryButton = TextButton(
       onPressed: () {
-        getImageFromGallery(ImageSource.gallery);
+        pickImagenn(ImageSource.gallery);
       },
       child: Text('GALERIA'),
     );
     Widget cameraButton = TextButton(
       onPressed: () {
-        getImageFromGallery(ImageSource.camera);
+        pickImagenn(ImageSource.camera);
       },
       child: Text('CAMARA'),
     );
@@ -122,7 +142,7 @@ class DriverEditProfileController extends GetxController {
     AlertDialog alertDialog = AlertDialog(
       title: Text(
         'Selecciona tu imagen',
-        style: Theme.of(context).textTheme.headline3,
+        style: Theme.of(context).textTheme.headline5,
       ),
       actions: [
         galleryButton,

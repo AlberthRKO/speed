@@ -17,6 +17,9 @@ class ClientEditProfileController extends GetxController {
   final usernameController = TextEditingController();
   PickedFile pickedFile;
   File imageFile;
+  File imagenDriver;
+  var selectImagePath = ''.obs;
+  var selectImageSize = ''.obs;
 
   Client client;
 
@@ -77,14 +80,20 @@ class ClientEditProfileController extends GetxController {
       Duration(seconds: 2),
       () {
         Get.back();
+        Get.back();
       },
     );
   }
 
-  Future getImageFromGallery(ImageSource imageSource) async {
+  //Correcto
+  Future pickImagenn(ImageSource imageSource) async {
     pickedFile = await ImagePicker().getImage(source: imageSource);
     if (pickedFile != null) {
-      imageFile = File(pickedFile.path);
+      selectImagePath.value = pickedFile.path;
+      selectImageSize.value =
+          ((File(selectImagePath.value)).lengthSync() / 1024 / 1024)
+                  .toStringAsFixed(2) +
+              " MB";
     } else {
       print('No selecciono ninguna imagen');
     }
@@ -96,13 +105,13 @@ class ClientEditProfileController extends GetxController {
   void showAlertDialog(context) {
     Widget galleryButton = TextButton(
       onPressed: () {
-        getImageFromGallery(ImageSource.gallery);
+        pickImagenn(ImageSource.gallery);
       },
       child: Text('GALERIA'),
     );
     Widget cameraButton = TextButton(
       onPressed: () {
-        getImageFromGallery(ImageSource.camera);
+        pickImagenn(ImageSource.camera);
       },
       child: Text('CAMARA'),
     );
@@ -110,7 +119,7 @@ class ClientEditProfileController extends GetxController {
     AlertDialog alertDialog = AlertDialog(
       title: Text(
         'Selecciona tu imagen',
-        style: Theme.of(context).textTheme.headline3,
+        style: Theme.of(context).textTheme.headline5,
       ),
       actions: [
         galleryButton,
