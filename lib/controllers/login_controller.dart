@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,6 +19,7 @@ import 'package:speed/utils/progress.dart';
 class LoginController extends GetxController {
   // Instanciamos firebase
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  StreamSubscription<User> status;
   final appData = GetStorage();
 
   final formKey = GlobalKey<FormState>();
@@ -34,6 +38,7 @@ class LoginController extends GetxController {
     // limpiamos los campos
     emailController.dispose();
     passwordController.dispose();
+    status?.cancel();
     super.dispose();
   }
 
@@ -60,7 +65,7 @@ class LoginController extends GetxController {
 
   void isLogin() {
     String notifi = appData.read('isNotification');
-    FirebaseAuth.instance.authStateChanges().listen(
+    status = FirebaseAuth.instance.authStateChanges().listen(
       (User user) {
         if (user != null) {
           print('validacionnnnnn $notifi');
@@ -155,26 +160,48 @@ class LoginController extends GetxController {
           Driver driver = await DriverController().getById(user.uid);
           if (driver != null) {
             String nombre = driver.username;
-            Get.snackbar(
-              'Bienvenido a Speed', //titulo
-              'Su cuenta $nombre como ' +
-                  tipeUser() +
-                  ', ingreso correctamente',
-              backgroundColor: Theme.of(context).cardColor,
-              // icon: Icon(FontAwesomeIcons.solidLaughWink),
-              colorText: Theme.of(context).hintColor,
-            );
-            print('Login correcto driver');
-            // hacemos un delay de 2 s y que acceda a la vista
-            Future.delayed(
-              Duration(seconds: 2),
-              () {
-                Get.offAll(
-                  () => HomeDriver(),
-                  transition: Transition.downToUp,
-                );
-              },
-            );
+            if (driver.estado == 'pendiente') {
+              Get.snackbar(
+                'Cuenta Pendiente', //titulo
+                'Su cuenta $nombre como ' +
+                    tipeUser() +
+                    ', esta en revision y aun no se valido su acceso',
+                backgroundColor: Theme.of(context).cardColor,
+                // icon: Icon(FontAwesomeIcons.solidLaughWink),
+                colorText: Theme.of(context).hintColor,
+              );
+              _signOut();
+              return;
+            }
+            if (driver.estado == 'rechazado') {
+              snackError(
+                  title: 'Cuenta Rechazada',
+                  msg: 'Su cuenta ha sido rechazada en la validación');
+              _signOut();
+              return;
+            }
+            if (driver.estado == 'habilitado') {
+              Get.snackbar(
+                'Bienvenido a Speed', //titulo
+                'Su cuenta $nombre como ' +
+                    tipeUser() +
+                    ', ingreso correctamente',
+                backgroundColor: Theme.of(context).cardColor,
+                // icon: Icon(FontAwesomeIcons.solidLaughWink),
+                colorText: Theme.of(context).hintColor,
+              );
+              print('Login correcto driver');
+              // hacemos un delay de 2 s y que acceda a la vista
+              Future.delayed(
+                Duration(seconds: 2),
+                () {
+                  Get.offAll(
+                    () => HomeDriver(),
+                    transition: Transition.downToUp,
+                  );
+                },
+              );
+            }
           } else {
             snackError(title: 'Error', msg: 'El acceso no es valido');
             _signOut();

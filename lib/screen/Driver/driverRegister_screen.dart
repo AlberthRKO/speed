@@ -172,6 +172,39 @@ class DriverRegister extends StatelessWidget {
                                   SizedBox(
                                     height: 10,
                                   ),
+
+                                  GestureDetector(
+                                    onTap: () =>
+                                        _.showAlertDialogPlaca(context),
+                                    child: Obx(
+                                      () => _.selectImagePathPlaca.value == ''
+                                          ? ImagenDriver(
+                                              backgroundImage: AssetImage(
+                                                  'assets/images/placa.png'),
+                                            )
+                                          : ImagenDriver(
+                                              backgroundImage: FileImage(
+                                                File(_.selectImagePathPlaca
+                                                    .value),
+                                              ),
+                                            ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    'Foto de la placa del vehiculo',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontStyle: FontStyle.italic,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+
                                   InputControl(
                                     controlador: _.email,
                                     hint: 'Email',
@@ -203,6 +236,42 @@ class DriverRegister extends StatelessWidget {
                                     validar: (value) => value.isEmpty
                                         ? 'La contraseña no puede estar en blanco'
                                         : null,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () =>
+                                        _.showAlertDialogLicencia(context),
+                                    child: Obx(
+                                      () =>
+                                          _.selectImagePathLicencia.value == ''
+                                              ? ImagenDriver(
+                                                  backgroundImage: AssetImage(
+                                                      'assets/images/licencia.png'),
+                                                )
+                                              : ImagenDriver(
+                                                  backgroundImage: FileImage(
+                                                    File(_
+                                                        .selectImagePathLicencia
+                                                        .value),
+                                                  ),
+                                                ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    'Foto de la licencia del conductor',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontStyle: FontStyle.italic,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
                                   ),
                                 ],
                               ),

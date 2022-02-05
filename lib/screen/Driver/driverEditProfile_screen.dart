@@ -111,7 +111,7 @@ class DriverEditProfile extends StatelessWidget {
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  InputControl(
+                                  /* InputControl(
                                     controlador: _.modeloController,
                                     hint: 'Modelo',
                                     icon: FontAwesomeIcons.carSide,
@@ -133,7 +133,7 @@ class DriverEditProfile extends StatelessWidget {
                                         : ((value.length < 8)
                                             ? 'El numero de placa debe tener almenos 8 caracteres'
                                             : null),
-                                  ),
+                                  ), */
                                 ],
                               ),
                             ),

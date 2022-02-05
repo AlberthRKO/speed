@@ -43,8 +43,8 @@ class DriverEditProfileController extends GetxController {
 
   Future<void> actualizar(context) async {
     String nombre = nameController.text;
-    String model = modeloController.text;
-    String placa = placaController.text;
+    // String model = modeloController.text;
+    // String placa = placaController.text;
     ProgressDialog pr = Progresso.crearProgress(context, 'Actualizando...');
 
     if (formKey.currentState.validate()) {
@@ -60,8 +60,8 @@ class DriverEditProfileController extends GetxController {
       Map<String, dynamic> data = {
         'image': driver?.image ?? null,
         'username': nombre,
-        'modelo': model,
-        'placa': placa,
+        // 'modelo': model,
+        // 'placa': placa,
       };
 
       await DriverController().actualizar(data, getUser().uid);
@@ -72,8 +72,8 @@ class DriverEditProfileController extends GetxController {
       Map<String, dynamic> data = {
         'image': imageUrl,
         'username': nombre,
-        'modelo': model,
-        'placa': placa,
+        // 'modelo': model,
+        // 'placa': placa,
       };
 
       await DriverController().actualizar(data, getUser().uid);
