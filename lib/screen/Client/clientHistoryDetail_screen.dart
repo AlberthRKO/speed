@@ -5,6 +5,7 @@ import 'package:speed/components/avatar.dart';
 import 'package:speed/components/background.dart';
 import 'package:speed/components/shakeTransition.dart';
 import 'package:speed/controllers/Client/clientHistoryDetail_controller.dart';
+import 'package:speed/screen/viewImagen_screen.dart';
 
 class ClientHistoryDetail extends StatelessWidget {
   @override
@@ -59,10 +60,17 @@ class ClientHistoryDetail extends StatelessWidget {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Avatar(
-                                  backgroundImage: _.driver?.image != null
-                                      ? NetworkImage(_.driver?.image)
-                                      : AssetImage('assets/images/yo.png'),
+                                GestureDetector(
+                                  onTap: () => Get.to(
+                                    ViewImagen(
+                                      imagen: NetworkImage(_.driver?.image),
+                                    ),
+                                  ),
+                                  child: Avatar(
+                                    backgroundImage: _.driver?.image != null
+                                        ? NetworkImage(_.driver?.image)
+                                        : AssetImage('assets/images/yo.png'),
+                                  ),
                                 ),
                                 SizedBox(
                                   height: 10,
@@ -114,6 +122,68 @@ class ClientHistoryDetail extends StatelessWidget {
                                   'Precio del viaje',
                                   '${_.travelHistory?.price?.toString() ?? ''} Bs',
                                   FontAwesomeIcons.dollarSign,
+                                ),
+                                infoTravel(
+                                  context,
+                                  'Modelo',
+                                  _.driver?.modelo ?? '',
+                                  FontAwesomeIcons.carSide,
+                                ),
+                                GestureDetector(
+                                  onTap: () => Get.to(
+                                    ViewImagen(
+                                      imagen:
+                                          NetworkImage(_.driver?.imageModelo),
+                                    ),
+                                  ),
+                                  child: ImagenDriver(
+                                    backgroundImage: _.driver?.imageModelo !=
+                                            null
+                                        ? NetworkImage(_.driver?.imageModelo)
+                                        : AssetImage(
+                                            'assets/images/modelo.png'),
+                                  ),
+                                ),
+                                infoTravel(
+                                  context,
+                                  'Placa',
+                                  _.driver?.placa ?? '',
+                                  FontAwesomeIcons.carAlt,
+                                ),
+                                GestureDetector(
+                                  onTap: () => Get.to(
+                                    ViewImagen(
+                                      imagen:
+                                          NetworkImage(_.driver?.imagePlaca),
+                                    ),
+                                  ),
+                                  child: ImagenDriver(
+                                    backgroundImage: _.driver?.imagePlaca !=
+                                            null
+                                        ? NetworkImage(_.driver?.imagePlaca)
+                                        : AssetImage('assets/images/placa.png'),
+                                  ),
+                                ),
+                                infoTravel(
+                                  context,
+                                  'Licencia',
+                                  '',
+                                  FontAwesomeIcons.carCrash,
+                                ),
+                                GestureDetector(
+                                  onTap: () => Get.to(
+                                    ViewImagen(
+                                      imagen:
+                                          NetworkImage(_.driver?.imageLicencia),
+                                    ),
+                                  ),
+                                  child: ImagenDriver(
+                                    backgroundImage: _.driver?.imageLicencia !=
+                                            null
+                                        ? NetworkImage(_.driver?.imageLicencia)
+                                        : AssetImage(
+                                            'assets/images/licencia.png'),
+                                  ),
                                 ),
                               ],
                             ),

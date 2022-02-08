@@ -5,6 +5,7 @@ import 'package:speed/components/avatar.dart';
 import 'package:speed/components/menuOption.dart';
 import 'package:speed/controllers/Client/clientMap_controller.dart';
 import 'package:speed/controllers/sidebar_controller.dart';
+import 'package:speed/screen/viewImagen_screen.dart';
 import 'package:speed/theme/themeChange.dart';
 
 class SidebarClient extends StatelessWidget {
@@ -52,11 +53,18 @@ class SidebarClient extends StatelessWidget {
                   builder: (_info) => Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Avatar(
-                        backgroundImage: _info.client?.image != null
-                            ? NetworkImage(_info.client?.image)
-                            : AssetImage('assets/images/yo.png'),
-                        radio: 40,
+                      GestureDetector(
+                        onTap: () => Get.to(
+                          ViewImagen(
+                            imagen: NetworkImage(_info.client?.image),
+                          ),
+                        ),
+                        child: Avatar(
+                          backgroundImage: _info.client?.image != null
+                              ? NetworkImage(_info.client?.image)
+                              : AssetImage('assets/images/yo.png'),
+                          radio: 40,
+                        ),
                       ),
                       SizedBox(
                         height: 10,

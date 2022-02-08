@@ -5,6 +5,7 @@ import 'package:speed/components/avatar.dart';
 import 'package:speed/components/background.dart';
 import 'package:speed/components/shakeTransition.dart';
 import 'package:speed/controllers/Driver/driverHistoryDetail_controller.dart';
+import 'package:speed/screen/viewImagen_screen.dart';
 
 class DriverHistoryDetail extends StatelessWidget {
   @override
@@ -58,10 +59,17 @@ class DriverHistoryDetail extends StatelessWidget {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Avatar(
-                                  backgroundImage: _.client?.image != null
-                                      ? NetworkImage(_.client?.image)
-                                      : AssetImage('assets/images/yo.png'),
+                                GestureDetector(
+                                  onTap: () => Get.to(
+                                    ViewImagen(
+                                      imagen: NetworkImage(_.client?.image),
+                                    ),
+                                  ),
+                                  child: Avatar(
+                                    backgroundImage: _.client?.image != null
+                                        ? NetworkImage(_.client?.image)
+                                        : AssetImage('assets/images/yo.png'),
+                                  ),
                                 ),
                                 SizedBox(
                                   height: 10,

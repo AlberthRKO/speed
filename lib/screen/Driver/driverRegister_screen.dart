@@ -165,7 +165,7 @@ class DriverRegister extends StatelessWidget {
                                     icon: FontAwesomeIcons.car,
                                     validar: (value) => value.isEmpty
                                         ? 'La placa no puede estar en blanco'
-                                        : ((value.length < 8)
+                                        : ((value.length < 6)
                                             ? 'El numero de placa debe tener almenos 8 caracteres'
                                             : null),
                                   ),

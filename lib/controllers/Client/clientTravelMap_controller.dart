@@ -338,6 +338,9 @@ class ClientTravelMapController extends GetxController {
         correo: driver?.email,
         modelo: driver?.modelo,
         placa: driver?.placa,
+        driverModelo: driver?.imageModelo,
+        driverLicencia: driver?.imageLicencia,
+        driverPlaca: driver?.imagePlaca,
       ),
     );
   }

@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:speed/components/avatar.dart';
 import 'package:speed/components/boxForm.dart';
+import 'package:speed/screen/viewImagen_screen.dart';
 
 class BottomSheetClient extends StatelessWidget {
   final String url;
+  final String driverModelo;
+  final String driverPlaca;
+  final String driverLicencia;
   final String nombre;
   final String correo;
   final String modelo;
@@ -17,75 +22,38 @@ class BottomSheetClient extends StatelessWidget {
     @required this.modelo,
     @required this.placa,
     this.url = 'assets/images/yo.png',
+    this.driverModelo = '',
+    this.driverLicencia = '',
+    this.driverPlaca = '',
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Boxform(
-      tamanBox: 0.5,
+      tamanBox: 0.6,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: size.width > 450
-            ? Column(
+            ? ListView(
                 children: [
-                  Text(
-                    'Tu conductor',
-                    style: Theme.of(context).textTheme.headline3,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Column(
                     children: [
-                      infoTravel(
-                        context,
-                        'Nombre',
-                        nombre ?? '',
-                        FontAwesomeIcons.solidUser,
+                      Text(
+                        'Tu conductor',
+                        style: Theme.of(context).textTheme.headline3,
                       ),
-                      infoTravel(
-                        context,
-                        'Correo',
-                        correo ?? '',
-                        FontAwesomeIcons.solidEnvelope,
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Avatar(
+                        backgroundImage: url != null
+                            ? NetworkImage(url)
+                            : AssetImage('assets/images/yo.png'),
+                        radio: 40,
                       ),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      infoTravel(
-                        context,
-                        'Modelo',
-                        modelo ?? '',
-                        FontAwesomeIcons.carSide,
-                      ),
-                      infoTravel(
-                        context,
-                        'Placa',
-                        placa ?? '',
-                        FontAwesomeIcons.car,
-                      ),
-                    ],
-                  ),
-                ],
-              )
-            : Column(
-                children: [
-                  Text(
-                    'Tu conductor',
-                    style: Theme.of(context).textTheme.headline3,
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  size.width > 450
-                      ? Container()
-                      : Avatar(
-                          backgroundImage: url != null
-                              ? NetworkImage(url)
-                              : AssetImage('assets/images/yo.png'),
-                          radio: 40,
-                        ),
                   SizedBox(
                     height: 5,
                   ),
@@ -107,11 +75,141 @@ class BottomSheetClient extends StatelessWidget {
                     modelo ?? '',
                     FontAwesomeIcons.carSide,
                   ),
+                  ImagenDriver(
+                    backgroundImage: driverModelo != ''
+                        ? NetworkImage(driverModelo)
+                        : AssetImage('assets/images/modelo.png'),
+                  ),
                   infoTravel(
                     context,
                     'Placa',
                     placa ?? '',
                     FontAwesomeIcons.car,
+                  ),
+                  ImagenDriver(
+                    backgroundImage: driverPlaca != ''
+                        ? NetworkImage(driverPlaca)
+                        : AssetImage('assets/images/placa.png'),
+                  ),
+                  infoTravel(
+                    context,
+                    'Licencia',
+                    '',
+                    FontAwesomeIcons.car,
+                  ),
+                  ImagenDriver(
+                    backgroundImage: driverLicencia != ''
+                        ? NetworkImage(driverLicencia)
+                        : AssetImage('assets/images/licencia.png'),
+                  ),
+                ],
+              )
+            : ListView(
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                        'Tu conductor',
+                        style: Theme.of(context).textTheme.headline3,
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Get.back();
+                          Get.to(
+                            ViewImagen(
+                              imagen: NetworkImage(url),
+                            ),
+                          );
+                        },
+                        child: Avatar(
+                          backgroundImage: url != null
+                              ? NetworkImage(url)
+                              : AssetImage('assets/images/yo.png'),
+                          radio: 40,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  infoTravel(
+                    context,
+                    'Nombre',
+                    nombre ?? '',
+                    FontAwesomeIcons.solidUser,
+                  ),
+                  infoTravel(
+                    context,
+                    'Correo',
+                    correo ?? '',
+                    FontAwesomeIcons.solidEnvelope,
+                  ),
+                  infoTravel(
+                    context,
+                    'Modelo',
+                    modelo ?? '',
+                    FontAwesomeIcons.carSide,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.back();
+                      Get.to(
+                        ViewImagen(
+                          imagen: NetworkImage(driverModelo),
+                        ),
+                      );
+                    },
+                    child: ImagenDriver(
+                      backgroundImage: driverModelo != ''
+                          ? NetworkImage(driverModelo)
+                          : AssetImage('assets/images/modelo.png'),
+                    ),
+                  ),
+                  infoTravel(
+                    context,
+                    'Placa',
+                    placa ?? '',
+                    FontAwesomeIcons.car,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.back();
+                      Get.to(
+                        ViewImagen(
+                          imagen: NetworkImage(driverPlaca),
+                        ),
+                      );
+                    },
+                    child: ImagenDriver(
+                      backgroundImage: driverPlaca != ''
+                          ? NetworkImage(driverPlaca)
+                          : AssetImage('assets/images/placa.png'),
+                    ),
+                  ),
+                  infoTravel(
+                    context,
+                    'Licencia',
+                    '',
+                    FontAwesomeIcons.car,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.back();
+                      Get.to(
+                        ViewImagen(
+                          imagen: NetworkImage(driverLicencia),
+                        ),
+                      );
+                    },
+                    child: ImagenDriver(
+                      backgroundImage: driverLicencia != ''
+                          ? NetworkImage(driverLicencia)
+                          : AssetImage('assets/images/licencia.png'),
+                    ),
                   ),
                 ],
               ),

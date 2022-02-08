@@ -180,6 +180,14 @@ class LoginController extends GetxController {
               _signOut();
               return;
             }
+            if (driver.estado == 'suspendido') {
+              snackError(
+                  title: 'Cuenta Suspendida',
+                  msg:
+                      'Su cuenta ha sido suspendida debido a quejas o demandas de los clientes');
+              _signOut();
+              return;
+            }
             if (driver.estado == 'habilitado') {
               Get.snackbar(
                 'Bienvenido a Speed', //titulo
